@@ -1,2 +1,2 @@
 print("Your Name Guy")
-print("Sad ")
+print("Sad Good")
