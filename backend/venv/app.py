@@ -56,7 +56,7 @@ def post_user_login () :
         return jsonify(False)
     return jsonify(True)
 
-#Teacher Home Page
+#Teacher Home Page================================================================================================================
 @app.route("/home/teacher/<uid>",methods = ["GET"])
 def get_home_teacher (uid) :
     teacher = get_database("users").find_one({"id_user": uid},{"_id" : 0,"name":1})
@@ -79,4 +79,14 @@ def post_home_teacher (uid) :
         get_database("classroom").insert_one(create)
     except :
         return jsonify(False)
+    return jsonify(True)
+@app.route("/home/teacher/delete_classroom",methods = ["DELETE"])
+def delete_home_teacher () :
+    data_json = request.get_json()
+    get_database("classroom").delete_one({"id_classroom":data_json["id_classroom"]})
+    get_database("users").update_many({},{"$pull":{"id_classroom":data_json["id_classroom"]}})
+    list_lesson = get_database("classroom").find_one({"id_classroom":data_json["id_classroom"]},{"_id":0,"id_lesson":1})["id_lesson"]
+    get_database("question").delete_many({"id_lesson":{"$in" : list_lesson}})
+    get_database("file_lesson").delete_many({"id_lesson":{"$in" : list_lesson}})
+    get_database("studentboard").delete_many({"id_classroom": data_json["id_classroom"]})
     return jsonify(True)
