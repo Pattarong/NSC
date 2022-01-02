@@ -124,15 +124,13 @@ def add_lessson_classroom () :
     data_json = request.get_json()
     lid = "L"+str(max_CL_L_U("max_lesson"))
     deadline = None if data_json["deadline"] == "None"  else  data_json["deadline"] 
-    mindmap = None if data_json["mindmap"] == "None"  else  "mindmap/"+lid 
-    document = None if data_json["document_file"] == "None"  else  "doc/"+lid 
     lp = None if data_json["lesson_picture"] == "None"  else  "lp/"+lid 
     create = {
         "id_lesson" : lid,
-        "document_file" : document,
-        "vdo_file" : "vdo/"+lid,
+        "document_file" : "doc/",
+        "vdo_file" : "vdo/",
         "deadline" : deadline,
-        "mindmap" : mindmap,
+        "mindmap" : "mindmap"+lid,
         "hide" : True,
         "lesson_picture" : lp,
         "name" : data_json["name"]
