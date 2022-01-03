@@ -182,4 +182,15 @@ def edit_lessson_classroom (lid) :
     except :
         jsonify(False)
     return jsonify(True)
-
+#11111111111111111111111111111111111111111111111111111
+@app.route("/home/user/<uid>",methods = ["GET"])
+def get_home_user (uid) :
+    firstname = get_database("users").find_one({"id_user": uid},{"_id" : 0,"name":1 })
+    lastname = get_database("users").find_one({"id_user": uid},{"_id" : 0,"surename":1 })
+    studentID = get_database("users").find_one({"id_user": uid},{"_id" : 0,"id_student":1 })
+    Email = get_database("users").find_one({"id_user": uid},{"_id" : 0,"email":1 })
+    data_classroom = get_database("users").find_one({"_id" : 0,"id_classroom":1})
+    get_id_classroom = data_classroom["id_classroom"]
+    get_data_classroom = get_database("classroom").find({"id_classroom" : {"$in" : get_id_classroom}},{"_id" : 0,"id_classroom":1,"name_classroom" : 1 , "icon_classroom" : 1})
+    result = {"name":firstname["name"],"list_classroom":get_data_classroom, "surename":lastname["surename"],"studentID":studentID["id_student"],"Email":Email["email"]}
+    return jsonify(result)
