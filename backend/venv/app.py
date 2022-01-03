@@ -18,6 +18,11 @@ def get_database(collection) :
     client = MongoClient("mongodb+srv://Worawibun:1234skya@cluster0.qnbhh.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
     db = client["GTO"]
     return db[collection]
+def max_Q (lid) :
+    max = get_database("max_question").find_one({"id_lesson":lid},{"_id" : 0,"max_question" : 1})["max_question"]
+    get_database("max_question").update_one({"id_lesson":lid},{"$set" : {"max_question": max+1}})
+    result = get_database("max_question").find_one({"id_lesson":lid},{"_id" : 0,"max_question" : 1})["max_question"]
+    return result
 
 @app.route("/users",methods = ["GET"])
 def get_users () :
@@ -108,19 +113,19 @@ def users_classroom () :
 
 #LESSON in class========================================================================
 
-@app.route("/lesson_classroom/teacher",methods = ["POST"])
-def get_lessson_classroom () :
+@app.route("/lesson_classroom/teacher/<clid>",methods = ["POST"])
+def get_lessson_classroom (clid) :
     data_json = request.get_json()
     result = []
     try :
-        list_lesson = get_database("classroom").find_one({"id_classroom": data_json["id_classroom"]},{"_id":0,"id_lesson":1})["id_lesson"]
+        list_lesson = get_database("classroom").find_one({"id_classroom": clid},{"_id":0,"id_lesson":1})["id_lesson"]
         result = list(get_database("file_lesson").find({"id_lesson" : {"$in" : list_lesson}},{"_id":0,"id_lesson":1,"hide" : 1,"name":1,"deadline":1,"lesson_picture":1}))
     except :
         jsonify(False)
     return jsonify(result)
 
-@app.route("/lesson_classroom/add/teacher",methods = ["POST"])
-def add_lessson_classroom () :
+@app.route("/lesson_classroom/add/teacher/<clid>",methods = ["POST"])
+def add_lessson_classroom (clid) :
     data_json = request.get_json()
     lid = "L"+str(max_CL_L_U("max_lesson"))
     deadline = None if data_json["deadline"] == "None"  else  data_json["deadline"] 
@@ -137,10 +142,57 @@ def add_lessson_classroom () :
     }
     try :
         get_database("file_lesson").insert_one(create)
-        get_database("classroom").update_one({"id_classroom" : data_json["id_classroom"]},{"$push" : {"id_lesson" : lid}})
+        get_database("classroom").update_one({"id_classroom" :clid},{"$push" : {"id_lesson" : lid}})
     except :
         return jsonify(False)
     return jsonify(True)
+
+
+@app.route("/lesson_classroom/delete/teacher/<lid>",methods = ["DELETE"])
+def delete_lessson_classroom (lid) :
+    try :
+        get_database("file_lesson").delete_one({"id_lesson" : lid})
+        get_database("question").delete_many({"id_lesson" : lid})
+        get_database("max_question").delete_one({"id_lesson" : lid})
+        get_database("classroom").update_one({"id_lesson" : {"$elemMatch" : {"$eq" : lid}}},{"$pull" : {"id_lesson" : lid}})
+    except :
+        jsonify(False)
+    return jsonify(True)
+#Edit Lesson and Question=================================================================
+@app.route("/lesson_classroom/edit_lesson/teacher/<lid>",methods = ["POST"])
+def edit_lessson_classroom (lid) :
+    data_json = request.get_json()
+    try :
+        get_database("file_lesson").update_one({"id_lesson" : lid},{"$set" : data_json})
+    except :
+        jsonify(False)
+    return jsonify(True)
+@app.route("/lesson_classroom/add_question/teacher/<lid>",methods = ["POST"])
+def add_question_classroom (lid) :
+    data_json = request.get_json()
+    try :
+        data_json["id_lesson"] = lid
+        data_json["id_question"] = "Q"+str(max_Q(lid))
+        get_database("question").insert_one(data_json)
+    except :
+        return jsonify(False)
+    return jsonify(True)
+@app.route("/lesson_classroom/delete_question/teacher/<lid>/<qid>",methods = ["GET"])
+def delete_question_classroom (lid,qid) :
+    try :
+        get_database("question").delete_one({"id_lesson":lid,"id_question" : qid})
+    except :
+        jsonify(False)
+    return jsonify(True)
+@app.route("/lesson_classroom/edit_question/teacher/<lid>/<qid>",methods = ["GET"])
+def edit_question_classroom (lid,qid) :
+    data_json = request.get_json()
+    try :
+        get_database("question").update_one({"id_lesson":lid,"id_question" : qid},{"$set" : data_json})
+    except :
+        jsonify(False)
+    return jsonify(True)
+
 # user_home_page ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 @app.route("/home/user/<uid>",methods = ["GET"])
 def get_home_user (uid) :
