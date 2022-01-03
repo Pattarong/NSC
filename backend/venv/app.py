@@ -15,7 +15,7 @@ def max_CL_L_U(type):
     return max[type]
 def get_database(collection) :
     from pymongo import MongoClient
-    client = MongoClient("mongodb+srv://Pattarong:1@cluster0.qnbhh.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
+    client = MongoClient("mongodb+srv://Worawibun:1234skya@cluster0.qnbhh.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
     db = client["GTO"]
     return db[collection]
 
@@ -141,3 +141,13 @@ def add_lessson_classroom () :
     except :
         return jsonify(False)
     return jsonify(True)
+# user_home_page ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+@app.route("/home/user/<uid>",methods = ["GET"])
+def get_home_user (uid) :
+    firstname = get_database("users").find_one({"id_user": uid},{"_id" : 0,"name":1 })
+    lastname = get_database("users").find_one({"id_user": uid},{"_id" : 0,"surename":1 })
+    studentID = get_database("users").find_one({"id_user": uid},{"_id" : 0,"id_student":1 })
+    Email = get_database("users").find_one({"id_user": uid},{"_id" : 0,"email":1 })
+    data_classroom = list(get_database("classroom").find({"_id" : 0,"name":1,"icon_classroom":1,"id_classroom":1}))
+    result = {"name":firstname["name"],"list_classroom":data_classroom, "surename":lastname["surename"],"studentID":studentID["id_student"],"Email":Email["email"]}
+    return jsonify(result)
