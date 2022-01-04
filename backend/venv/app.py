@@ -15,11 +15,11 @@ def max_CL_L_U(type):
     return max[type]
 def get_database(collection) :
     from pymongo import MongoClient
-    client = MongoClient("mongodb+srv://Pattarong:1@cluster0.qnbhh.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
+    client = MongoClient("mongodb+srv://Worawibun:1234skya@cluster0.qnbhh.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
     db = client["GTO"]
     return db[collection]
 def max_Q (lid) :
-    max = get_database("max_question").find_one({"id_lesson":lid},{"_id" : 0,"max_question" : 1})["max_question"]
+    max = get_database("max_question").find_one({"id_lesson":lid},{"_id" : 0,"max_question" : 1})["max_questigit on"]
     get_database("max_question").update_one({"id_lesson":lid},{"$set" : {"max_question": max+1}})
     result = get_database("max_question").find_one({"id_lesson":lid},{"_id" : 0,"max_question" : 1})["max_question"]
     return result
@@ -182,17 +182,10 @@ def edit_lessson_classroom (lid) :
     except :
         jsonify(False)
     return jsonify(True)
-#qwqwqweqweqweqweqweqweqweqwe
 #11111111111111111111111111111111111111111111111111111
-@app.route("/home/user/<uid>",methods = ["GET"])
+@app.route("/home/users/<uid>",methods = ["GET"])
 def get_home_user (uid) :
-    firstname = get_database("users").find_one({"id_user": uid},{"_id" : 0,"name":1 })
-    lastname = get_database("users").find_one({"id_user": uid},{"_id" : 0,"surename":1 })
-    studentID = get_database("users").find_one({"id_user": uid},{"_id" : 0,"id_student":1 })
-    Email = get_database("users").find_one({"id_user": uid},{"_id" : 0,"email":1 })
-    data_classroom = get_database("users").find_one({"_id" : 0,"id_classroom":1})
-    get_id_classroom = data_classroom["id_classroom"]
-    get_data_classroom = get_database("classroom").find({"id_classroom" : {"$in" : get_id_classroom}},{"_id" : 0,"id_classroom":1,"name_classroom" : 1 , "icon_classroom" : 1})
-    result = {"name":firstname["name"],"list_classroom":get_data_classroom, "surename":lastname["surename"],"studentID":studentID["id_student"],"Email":Email["email"]}
+    data = get_database("users").find_one({"id_user": uid},{"_id" : 0,"password":0 })
+    result = {"data":data}
     return jsonify(result)
-print("B")
+    
