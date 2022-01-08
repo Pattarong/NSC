@@ -19,9 +19,9 @@ def get_database(collection) :
     db = client["GTO"]
     return db[collection]
 def max_Q (lid) :
-    max = get_database("max_question").find_one({"id_lesson":lid},{"_id" : 0,"max_question" : 1})["max_question"]
-    get_database("max_question").update_one({"id_lesson":lid},{"$set" : {"max_question": max+1}})
-    result = get_database("max_question").find_one({"id_lesson":lid},{"_id" : 0,"max_question" : 1})["max_question"]
+    max = get_database("file_lesson").find_one({"id_lesson":lid},{"_id" : 0,"max_question" : 1})["max_question"]
+    get_database("file_lesson").update_one({"id_lesson":lid},{"$set" : {"max_question": max+1}})
+    result = get_database("file_lesson").find_one({"id_lesson":lid},{"_id" : 0,"max_question" : 1})["max_question"]
     return result
 
 @app.route("/users",methods = ["GET"])
@@ -39,14 +39,14 @@ def post_users () :
         uid =  "U"+str(max_CL_L_U("max_user"))
         password = hashlib.sha256(data_json["password"].encode()).hexdigest()
         create = {
-        "name": data_json["name"],
-        "email": data_json["email"],
-        "id_classroom": [],
-        "id_student": data_json["id_student"],
-        "password": password,
-        "profile_picture": "profile/"+uid,
-        "surename": data_json["surename"],
-        "id_user": uid
+            "name": data_json["name"],
+            "email": data_json["email"],
+            "id_classroom": [],
+            "id_student": data_json["id_student"],
+            "password": password,
+            "profile_picture": "profile/"+uid,
+            "surename": data_json["surename"],
+            "id_user": uid
         }
         get_database("users").insert_one(create)
     except :
@@ -72,9 +72,8 @@ def get_home_teacher (uid) :
 @app.route("/home/teacher/add_classroom/<uid>",methods = ["POST"])
 def post_home_teacher (uid) :
     try :
-        max_classroom = max_CL_L_U("max_classroom")
         data_json = request.get_json()
-        id_classroom = "CL"+str(max_classroom)
+        id_classroom = "CL"+str(max_CL_L_U("max_classroom"))
         create = {
             "id_classroom" : id_classroom,
             "id_lesson" : [],
@@ -93,7 +92,6 @@ def delete_home_teacher () :
         list_lesson = get_database("classroom").find_one({"id_classroom":data_json["id_classroom"]},{"_id":0,"id_lesson":1})["id_lesson"]
         get_database("classroom").delete_one({"id_classroom":data_json["id_classroom"]})
         get_database("question").delete_many({"id_lesson":{"$in" : list_lesson}})
-        get_database("max_question").delete_many({"id_classroom":data_json["id_classroom"]})
         get_database("file_lesson").delete_many({"id_lesson":{"$in" : list_lesson}})
         get_database("studentboard").delete_many({"id_classroom": data_json["id_classroom"]})
     except :
@@ -105,17 +103,20 @@ def delete_home_teacher () :
 def users_classroom () :
     data_json = request.get_json()
     try :
-        result = list(get_database("studentboard").find({"id_classroom":data_json["id_classroom"]},{"_id":0,"id_user":1,"id_lesson" :1,"id_classroom":1,"status": 1}))
-        print(result)
+        result = {}
+        result["status_user"] = list(get_database("studentboard").aggregate([
+            {"$match" : {"id_classroom" : data_json["id_classroom"]}},
+            {"$group" : { "_id":  "$id_user","list_lesson" : { "$push": {"id_lesson" : "$id_lesson","status" : "$status"}}}}
+            ])) 
+        result["name_users"] = list(get_database("users").find({"id_classroom" : { "$elemMatch" : {"$eq" : data_json["id_classroom"]}}},{"_id" : 0,"id_user" : 1,"name" : 1,"surename": 1}))
     except :
         return jsonify(False)
     return jsonify(result)
 
 #LESSON in class========================================================================
 
-@app.route("/lesson_classroom/teacher/<clid>",methods = ["POST"])
+@app.route("/lesson_classroom/teacher/<clid>",methods = ["GET"])
 def get_lessson_classroom (clid) :
-    data_json = request.get_json()
     result = []
     try :
         list_lesson = get_database("classroom").find_one({"id_classroom": clid},{"_id":0,"id_lesson":1})["id_lesson"]
@@ -128,17 +129,16 @@ def get_lessson_classroom (clid) :
 def add_lessson_classroom (clid) :
     data_json = request.get_json()
     lid = "L"+str(max_CL_L_U("max_lesson"))
-    deadline = None if data_json["deadline"] == "None"  else  data_json["deadline"] 
-    lp = None if data_json["lesson_picture"] == "None"  else  "lp/"+lid 
     create = {
         "id_lesson" : lid,
         "document_file" : "doc/",
         "vdo_file" : "vdo/",
-        "deadline" : deadline,
+        "deadline" : data_json["deadline"],
         "mindmap" : "mindmap"+lid,
         "hide" : True,
-        "lesson_picture" : lp,
-        "name" : data_json["name"]
+        "lesson_picture" : data_json["lesson_picture"],
+        "name" : data_json["name"],
+        "max_question" : 0
     }
     try :
         get_database("file_lesson").insert_one(create)
@@ -151,48 +151,45 @@ def delete_lessson_classroom (lid) :
     try :
         get_database("file_lesson").delete_one({"id_lesson" : lid})
         get_database("question").delete_many({"id_lesson" : lid})
-        get_database("max_question").delete_one({"id_lesson" : lid})
+        get_database("studentboard").delete_many({"id_lesson" : lid})
         get_database("classroom").update_one({"id_lesson" : {"$elemMatch" : {"$eq" : lid}}},{"$pull" : {"id_lesson" : lid}})
     except :
         jsonify(False)
     return jsonify(True)
-#Edit Lesson and Question=================================================================
-@app.route("/lesson_classroom/edit_lesson/teacher/<lid>",methods = ["PATCH"])
-def edit_lessson_classroom (lid) :
+#add_question=================================================================
+@app.route("/question_classroom/add/teacher/<lid>",methods = ["POST"])
+def add_question_classroom (lid) :
     data_json = request.get_json()
     try :
-        if  data_json["lesson"] != {} :
-            get_database("file_lesson").update_one({"id_lesson" : lid},{"$set" : data_json["lesson"]})
-        if data_json["question"] != [] :
-            for question in data_json["question"] :
-                if question["id_question"] == "None" :
-                    question["id_lesson"] = lid
-                    question["id_question"] = "Q"+str(max_Q(lid))
-                    get_database("question").insert_one(question)
-                else :
-                    get_database("question").update_one({"id_lesson":lid,"id_question" : question["id_question"]},{"$set" : question})
-        if data_json["list_delete"] != [] :
-            get_database("question").delete_many({"id_lesson" : lid,"id_question" : {"$in" : data_json["list_delete"]}})
-            pull = { "$pull" : 
-            {"answer_student" : {"id_question" : {"$in" : data_json["list_delete"]}}}}
-            get_database("studentboard").update_many({"id_lesson" : lid},pull)
-            pull = { "$pull" : 
-            {"point" : {"id_question" : {"$in" : data_json["list_delete"]}}}}
-            get_database("studentboard").update_many({"id_lesson" : lid},pull)
+        qid = "Q"+str(max_Q(lid))
+        create = {
+            "id_lesson" : lid,
+            "id_question" : qid,
+            "pattern" : data_json["pattern"],
+            "point" : data_json["point"],
+            "time" : data_json["time"]
+        }
+        get_database("question").insert_one(create)
+        get_database("studentboard").update_many({"id_lesson" : lid},{ "$push" : {"answer_student" : {"id_question" : qid , "answer" : "0"}}})
+    except :
+        return jsonify(False)
+    return jsonify(True)
+
+@app.route("/question_classroom/edit/teacher/<lid>/<qid>",methods = ["PATCH"])
+def edit_question_classroom (lid,qid) :
+    data_json = request.get_json()
+    try :
+        get_database("question").update_one({"id_lesson" : lid,"id_question" : qid},{"$set" :data_json})
+        
     except :
         jsonify(False)
     return jsonify(True)
-#qwqwqweqweqweqweqweqweqweqwe
-#11111111111111111111111111111111111111111111111111111
-@app.route("/home/user/<uid>",methods = ["GET"])
-def get_home_user (uid) :
-    firstname = get_database("users").find_one({"id_user": uid},{"_id" : 0,"name":1 })
-    lastname = get_database("users").find_one({"id_user": uid},{"_id" : 0,"surename":1 })
-    studentID = get_database("users").find_one({"id_user": uid},{"_id" : 0,"id_student":1 })
-    Email = get_database("users").find_one({"id_user": uid},{"_id" : 0,"email":1 })
-    data_classroom = get_database("users").find_one({"_id" : 0,"id_classroom":1})
-    get_id_classroom = data_classroom["id_classroom"]
-    get_data_classroom = get_database("classroom").find({"id_classroom" : {"$in" : get_id_classroom}},{"_id" : 0,"id_classroom":1,"name_classroom" : 1 , "icon_classroom" : 1})
-    result = {"name":firstname["name"],"list_classroom":get_data_classroom, "surename":lastname["surename"],"studentID":studentID["id_student"],"Email":Email["email"]}
-    return jsonify(result)
-print("B")
+
+@app.route("/question_classroom/delete/teacher/<lid>/<qid>",methods = ["DELETE"])
+def delete_question_classroom (lid,qid) :
+    get_database("studentboard").update_many({"id_lesson" : lid,"answer_student" : {"$elemMatch" : {"id_question" : qid}}},{"$pull" : {"answer_student" : {"id_question" : qid}}})
+    return 0
+
+@app.route("/question_classroom/find/teacher/<lid>/<qid>",methods = ["GET"])
+def find_question_classroom (lid,qid) :
+    return 0
