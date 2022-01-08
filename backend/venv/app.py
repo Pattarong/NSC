@@ -3,6 +3,7 @@ from bson import objectid
 import hashlib
 
 from jinja2.environment import create_cache
+from pymongo import results
 
 app = Flask(__name__)
 
@@ -170,6 +171,7 @@ def add_question_classroom (lid) :
             "time" : data_json["time"]
         }
         get_database("question").insert_one(create)
+        get_database("studentboard").update_many({"id_lesson" : lid},{ "$push" : {"point" : {"id_question" : qid , "point" : 0}}})
         get_database("studentboard").update_many({"id_lesson" : lid},{ "$push" : {"answer_student" : {"id_question" : qid , "answer" : "0"}}})
     except :
         return jsonify(False)
@@ -180,16 +182,40 @@ def edit_question_classroom (lid,qid) :
     data_json = request.get_json()
     try :
         get_database("question").update_one({"id_lesson" : lid,"id_question" : qid},{"$set" :data_json})
-        
     except :
         jsonify(False)
     return jsonify(True)
 
 @app.route("/question_classroom/delete/teacher/<lid>/<qid>",methods = ["DELETE"])
 def delete_question_classroom (lid,qid) :
-    get_database("studentboard").update_many({"id_lesson" : lid,"answer_student" : {"$elemMatch" : {"id_question" : qid}}},{"$pull" : {"answer_student" : {"id_question" : qid}}})
-    return 0
+    try :
+        get_database("studentboard").update_many({"id_lesson" : lid,"answer_student" : {"$elemMatch" : {"id_question" : qid}}},{"$pull" : {"answer_student" : {"id_question" : qid}}})
+        get_database("studentboard").update_many({"id_lesson" : lid,"point" : {"$elemMatch" : {"id_question" : qid}}},{"$pull" : {"point" : {"id_question" : qid}}})
+        get_database("question").delete_many({"id_lesson" : lid,"id_question" : qid})
+    except :
+        jsonify(False)
+    return jsonify(True)
 
-@app.route("/question_classroom/find/teacher/<lid>/<qid>",methods = ["GET"])
-def find_question_classroom (lid,qid) :
-    return 0
+@app.route("/question_classroom/find/teacher/<lid>",methods = ["GET"])
+def find_question_classroom (lid) :
+    try :
+        result = list(get_database("question").find({"id_lesson" : lid},{"_id" : 0,"id_question" : 1,"pattern" : 1}))
+    except :
+        jsonify(False)
+    return jsonify(result)
+
+@app.route("/question_classroom/add_answer/student/<uid>/<lid>/<qid>",methods = ["POST"])
+def check_answer_user (uid,lid,qid) :
+    data_json = request.get_json()
+    try : 
+        type_question = get_database("question").find_one({"id_lesson" : lid,"id_question" : qid},{"_id" : 0,"pattern.type" : 1 })["pattern"]["type"]
+        list_question = [1,2,3]
+        if type_question in list_question :
+            data_question = get_database("question").find_one({"id_lesson" : lid,"id_question" : qid},{"_id" : 0,"pattern" : 1})
+            if data_json["answer"] == data_question["answer"]:
+                get_database("studentboard").update_one({"id_question" : qid,"id_lesson" : lid,"id_user" : uid},{"$set" : {"answer_stdent" : }})
+        else :
+            print(2)
+    except :
+        jsonify(False)
+    return jsonify(True)
