@@ -172,7 +172,7 @@ def add_question_classroom (lid) :
         }
         get_database("question").insert_one(create)
         get_database("studentboard").update_many({"id_lesson" : lid},{ "$push" : {"point" : {"id_question" : qid , "point" : 0}}})
-        get_database("studentboard").update_many({"id_lesson" : lid},{ "$push" : {"answer_student" : {"id_question" : qid , "answer" : "0"}}})
+        get_database("studentboard").update_many({"id_lesson" : lid},{ "$push" : {"answer_student" : {"id_question" : qid , "answer" : ""}}})
     except :
         return jsonify(False)
     return jsonify(True)
@@ -183,7 +183,7 @@ def edit_question_classroom (lid,qid) :
     try :
         get_database("question").update_one({"id_lesson" : lid,"id_question" : qid},{"$set" :data_json})
     except :
-        jsonify(False)
+        jsonify(False) c
     return jsonify(True)
 
 @app.route("/question_classroom/delete/teacher/<lid>/<qid>",methods = ["DELETE"])
@@ -203,19 +203,36 @@ def find_question_classroom (lid) :
     except :
         jsonify(False)
     return jsonify(result)
-
+@app.route("/question_classroom/add_point/student/<uid>/<lid>/<qid>",methods = ["POST"])
+def add_point_user (uid,lid,qid) :
+    data_json = request.get_json()
+    try :
+        get_database("studentboard").update_many({"id_user" : uid,"id_lesson" : lid ,"point" : {"$elemMatch" : {"id_question" : qid}}},{"$set" : {"point.$.point" : data_json["point"]}})
+    except :
+        jsonify(False)
+    return jsonify(True)
 @app.route("/question_classroom/add_answer/student/<uid>/<lid>/<qid>",methods = ["POST"])
 def check_answer_user (uid,lid,qid) :
     data_json = request.get_json()
     try : 
         type_question = get_database("question").find_one({"id_lesson" : lid,"id_question" : qid},{"_id" : 0,"pattern.type" : 1 })["pattern"]["type"]
         list_question = [1,2,3]
+        data_question = get_database("question").find_one({"id_lesson" : lid,"id_question" : qid},{"_id" : 0,"pattern" : 1})["pattern"]
+        point = get_database("question").find_one({"id_lesson" : lid,"id_question" : qid},{"_id" : 0,"point" : 1})["point"]
+        get_database("studentboard").update_many({"id_user" : uid,"id_lesson" : lid ,"answer_student" : {"$elemMatch" : {"id_question" : qid}}},{"$set" : {"answer_student.$.answer" : data_json["answer"]}})
         if type_question in list_question :
-            data_question = get_database("question").find_one({"id_lesson" : lid,"id_question" : qid},{"_id" : 0,"pattern" : 1})
             if data_json["answer"] == data_question["answer"]:
-                get_database("studentboard").update_one({"id_question" : qid,"id_lesson" : lid,"id_user" : uid},{"$set" : {"answer_stdent" : }})
+                get_database("studentboard").update_many({"id_user" : uid,"id_lesson" : lid ,"point" : {"$elemMatch" : {"id_question" : qid}}},{"$set" : {"point.$.point" : point}})
+            else :
+                get_database("studentboard").update_many({"id_user" : uid,"id_lesson" : lid ,"point" : {"$elemMatch" : {"id_question" : qid}}},{"$set" : {"point.$.point" : 0}})
         else :
-            print(2)
+            get_database("studentboard").update_many({"id_user" : uid,"id_lesson" : lid ,"point" : {"$elemMatch" : {"id_question" : qid}}},{"$set" : {"point.$.point" : 0}})
     except :
         jsonify(False)
+    return jsonify(True)
+
+@app.route("/test/<uid>/<lid>/<qid>",methods = ["POST"])
+def Test (uid,lid,qid) :
+    data_json = request.get_json()
+    get_database("studentboard").update_many({"id_user" : uid,"id_lesson" : lid ,"answer_student" : {"$elemMatch" : {"id_question" : qid}}},{"$set" : {"answer_student.$.answer" : data_json["answer"]}})
     return jsonify(True)
