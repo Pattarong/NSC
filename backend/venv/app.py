@@ -183,7 +183,7 @@ def edit_question_classroom (lid,qid) :
     try :
         get_database("question").update_one({"id_lesson" : lid,"id_question" : qid},{"$set" :data_json})
     except :
-        jsonify(False) c
+        jsonify(False)
     return jsonify(True)
 
 @app.route("/question_classroom/delete/teacher/<lid>/<qid>",methods = ["DELETE"])
