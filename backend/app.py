@@ -1,14 +1,14 @@
 from flask import Flask, json, jsonify, request
 from bson import objectid
 import hashlib
-
 from jinja2.environment import create_cache
 from pymongo import results
+import jwt
 
 app = Flask(__name__)
-
 if __name__ == "__main__" :
     app.run(host="0.0.0.0")
+
 def max_CL_L_U(type):
     max =  get_database("static_max").find_one({"_id" : objectid.ObjectId("61cdccbb8acd724d42dfc36f")},{"_id" : 0})
     max[type] = max[type]+1
@@ -236,3 +236,20 @@ def Test (uid,lid,qid) :
     data_json = request.get_json()
     get_database("studentboard").update_many({"id_user" : uid,"id_lesson" : lid ,"answer_student" : {"$elemMatch" : {"id_question" : qid}}},{"$set" : {"answer_student.$.answer" : data_json["answer"]}})
     return jsonify(True)
+
+@app.route("/authen/user",methods = ["POST"])
+def Authen_user() :
+    data_json = request.get_json()
+    try :
+        password = hashlib.sha256(data_json["password"].encode()).hexdigest()
+        uid = get_database("users").find_one({"email" : data_json["email"] , "password" : password},{"_id" : 0,"id_user" : 1})["id_user"]
+        if uid != None :
+            encode_jwt = jwt.encode({"uid" : uid},"GTO_Great_Teacher_Online_P48w90G56",algorithm="HS256")
+            return jsonify({"token" : encode_jwt})
+        else :
+            return jsonify(False)
+    except :
+        return jsonify(False)
+
+
+
