@@ -4,8 +4,11 @@ import hashlib
 from jinja2.environment import create_cache
 from pymongo import results
 import jwt
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
+
 if __name__ == "__main__" :
     app.run(host="0.0.0.0")
 
@@ -242,9 +245,9 @@ def Authen_user() :
     data_json = request.get_json()
     try :
         password = hashlib.sha256(data_json["password"].encode()).hexdigest()
-        uid = get_database("users").find_one({"email" : data_json["email"] , "password" : password},{"_id" : 0,"id_user" : 1})["id_user"]
+        uid = get_database("users").find_one({"email" : data_json["email"] , "password" : password},{"_id" : 0,"id_user" : 1})
         if uid != None :
-            encode_jwt = jwt.encode({"uid" : uid},"GTO_Great_Teacher_Online_P48w90G56",algorithm="HS256")
+            encode_jwt = jwt.encode({"uid" : uid["id_user"]},"GTO_Great_Teacher_Online_P48w90G56",algorithm="HS256")
             return jsonify({"token" : encode_jwt})
         else :
             return jsonify(False)
