@@ -18,14 +18,17 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
   }
   async Login(){
-     let respone = await this.service.login_user(this.Login_form.value);
-    if (respone) {
-      this.router.navigate(["user-mode"]);
+     let res = await this.service.login_user(this.Login_form.value);
+    if (res["succes"]) {
+      this.router.navigate(["user-mode/"+res.id]);
       this.Warning = "";
     }
     else {
       this.Warning = "Try Again";
     }
+  }
+  goToLink(Link : string){
+    this.router.navigate([Link])
   }
 
 }

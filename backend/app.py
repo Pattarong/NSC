@@ -60,17 +60,17 @@ def post_users () :
 def post_user_login () :
     data_json = request.get_json()
     password = hashlib.sha256(data_json["password"].encode()).hexdigest()
-    user = get_database("users").find_one({"email" : data_json["email"],"password":password},{"_id" : 0})
+    user = get_database("users").find_one({"email" : data_json["email"],"password":password},{"_id" : 0,"id_user" : 1})
     if user == None :
-        return jsonify(False)
-    return jsonify(True)
+        return jsonify({"succes" : False})
+    return jsonify({"succes" : True, "id" : user["id_user"]})
 
 #Teacher Home Page================================================================================================================
 @app.route("/home/teacher/<uid>",methods = ["GET"])
 def get_home_teacher (uid) :
-    teacher = get_database("users").find_one({"id_user": uid},{"_id" : 0,"name":1})
+    teacher = get_database("users").find_one({"id_user": uid},{"_id" : 0,"name":1,"surename" : 1})
     data_classroom = list(get_database("classroom").find({"owner": uid},{"_id" : 0,"id_lesson":0,"owner" : 0}))
-    result = {"name":teacher["name"],"list_classroom":data_classroom}
+    result = {"name":teacher["name"],"surename":teacher["surename"],"list_classroom":data_classroom}
     return jsonify(result)
 
 @app.route("/home/teacher/add_classroom/<uid>",methods = ["POST"])
@@ -255,4 +255,20 @@ def Authen_user() :
         return jsonify(False)
 
 
+#user
+@app.route("/home/users/<uid>/classroom",methods = ["GET"])
+def get_home_user_classroom (uid) :
+    data = get_database("users").find_one({"id_user": uid},{"_id" : 0,"password":0 ,"id_classroom " : 0})
+    classroom = get_database("users").find({"id_user": uid},{"_id" : 0 , "id_classroom " : 1})
+    result = {"data":data,"classroom" : classroom }
+    return jsonify(result)
 
+@app.route("/home/users/<uid>/classroom/all",methods = ["GET"])
+def get_home_user_classeachtime (uid) :
+
+    data = get_database("users").find_one({"id_user": uid},{"_id" : 0,"password":0 ,"id_classroom" : 0})
+    data_classroom = get_database("users").find_one({"id_user": uid},{"_id" : 0,"id_classroom" : 1})["id_classroom"]
+    get_nameclassroom = list(get_database("classroom").find({"id_classroom" : {"$in" : data_classroom}},{"_id":0 , "name_classroom": 1, "icon_classroom" : 1, "id_classroom" : 1}))
+    
+    result = {"data":data , "id_classroom": data_classroom , "dataclassroom" :get_nameclassroom }
+    return jsonify(result)

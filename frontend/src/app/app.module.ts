@@ -18,6 +18,8 @@ import {ReactiveFormsModule ,FormsModule} from '@angular/forms';
 import { TeacherHomeComponent } from './page/teacher/teacher-home/teacher-home.component';
 import { StudentHomeComponent } from './page/student/student-home/student-home.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatCardModule} from '@angular/material/card';
+import { FlexLayoutModule } from '@angular/flex-layout';
 @NgModule({
   declarations: [
     AppComponent,
@@ -40,6 +42,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     MatIconModule,
     MatDividerModule,
     BrowserAnimationsModule,
+    MatCardModule,
+    FlexLayoutModule
   ],
   providers: [],
   bootstrap: [AppComponent]
