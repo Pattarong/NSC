@@ -38,4 +38,15 @@ export class UserService {
         "name_classroom" : data.name_classroom});
     return res.data;
   }
+  async delete_classroom(clid : string) {
+      await this.db.delete(this.Api+"/home/teacher/delete_classroom/"+clid,)
+  }
+  async call_lesson(clid : string) {
+    this.res = await this.db.get(this.Api+"/lesson_classroom/teacher/"+clid)
+    return  this.res.data;
+  }
+  async name_classroom(clid : string){
+    this.res = await this.db.get(this.Api+"/name_classroom/"+clid)
+    return this.res.data;
+  }
 }

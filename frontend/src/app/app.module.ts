@@ -20,6 +20,8 @@ import { StudentHomeComponent } from './page/student/student-home/student-home.c
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatCardModule} from '@angular/material/card';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { ListClassroomComponent } from './page/teacher/list-classroom/list-classroom.component';
+import { EditClassroomComponent } from './page/teacher/edit-classroom/edit-classroom.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -28,7 +30,9 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     RegisterComponent,
     UserModeComponent,
     TeacherHomeComponent,
-    StudentHomeComponent
+    StudentHomeComponent,
+    ListClassroomComponent,
+    EditClassroomComponent
 
   ],
   imports: [

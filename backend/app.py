@@ -88,16 +88,15 @@ def post_home_teacher (uid) :
     except :
         return jsonify(False)
     return jsonify(True)
-@app.route("/home/teacher/delete_classroom",methods = ["DELETE"])
-def delete_home_teacher () :
-    data_json = request.get_json()
+@app.route("/home/teacher/delete_classroom/<clid>",methods = ["DELETE"])
+def delete_home_teacher (clid) :
     try :
-        get_database("users").update_many({},{"$pull":{"id_classroom":data_json["id_classroom"]}})
-        list_lesson = get_database("classroom").find_one({"id_classroom":data_json["id_classroom"]},{"_id":0,"id_lesson":1})["id_lesson"]
-        get_database("classroom").delete_one({"id_classroom":data_json["id_classroom"]})
+        get_database("users").update_many({},{"$pull":{"id_classroom":clid}})
+        list_lesson = get_database("classroom").find_one({"id_classroom":clid},{"_id":0,"id_lesson":1})["id_lesson"]
+        get_database("classroom").delete_one({"id_classroom":clid})
         get_database("question").delete_many({"id_lesson":{"$in" : list_lesson}})
         get_database("file_lesson").delete_many({"id_lesson":{"$in" : list_lesson}})
-        get_database("studentboard").delete_many({"id_classroom": data_json["id_classroom"]})
+        get_database("studentboard").delete_many({"id_classroom": clid})
     except :
         return jsonify(False)
     return jsonify(True)
@@ -127,7 +126,7 @@ def get_lessson_classroom (clid) :
         result = list(get_database("file_lesson").find({"id_lesson" : {"$in" : list_lesson}},{"_id":0,"id_lesson":1,"hide" : 1,"name":1,"deadline":1,"lesson_picture":1}))
     except :
         jsonify(False)
-    return jsonify(result)
+    return jsonify( result)
 
 @app.route("/lesson_classroom/add/teacher/<clid>",methods = ["POST"])
 def add_lessson_classroom (clid) :
@@ -272,3 +271,7 @@ def get_home_user_classeachtime (uid) :
     
     result = {"data":data , "id_classroom": data_classroom , "dataclassroom" :get_nameclassroom }
     return jsonify(result)
+@app.route("/name_classroom/<clid>",methods = ["GET"])
+def name_classroom (clid) :
+    name = get_database("classroom").find_one({"id_classroom" : clid},{"_id" : 0,"name_classroom" : 1})["name_classroom"]
+    return jsonify({"name_classroom" : name})

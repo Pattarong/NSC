@@ -20,7 +20,7 @@ export class LoginComponent implements OnInit {
   async Login(){
      let res = await this.service.login_user(this.Login_form.value);
     if (res["succes"]) {
-      this.router.navigate(["user-mode/"+res.id]);
+      this.router.navigate(["student/home/"+res.id]);
       this.Warning = "";
     }
     else {
