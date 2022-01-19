@@ -102,16 +102,15 @@ def delete_home_teacher (clid) :
     return jsonify(True)
 
 #USER in class==========================================================================
-@app.route("/users_classroom/teacher",methods = ["POST"])
-def users_classroom () :
-    data_json = request.get_json()
+@app.route("/users_classroom/teacher/<clid>",methods = ["GET"])
+def users_classroom (clid) :
     try :
         result = {}
         result["status_user"] = list(get_database("studentboard").aggregate([
-            {"$match" : {"id_classroom" : data_json["id_classroom"]}},
-            {"$group" : { "_id":  "$id_user","list_lesson" : { "$push": {"id_lesson" : "$id_lesson","status" : "$status"}}}}
+            {"$match" : {"id_classroom" : clid}},
+            {"$group" : { "_id":  "$id_user","list_lesson" : { "$push": {"id_lesson" : "$id_lesson","status" : "$status"}}}},
             ])) 
-        result["name_users"] = list(get_database("users").find({"id_classroom" : { "$elemMatch" : {"$eq" : data_json["id_classroom"]}}},{"_id" : 0,"id_user" : 1,"name" : 1,"surename": 1}))
+        result["name_users"] = list(get_database("users").find({"id_classroom" : { "$elemMatch" : {"$eq" : clid}}},{"_id" : 0,"id_user" : 1,"name" : 1,"surename": 1,"id_student" : 1}))
     except :
         return jsonify(False)
     return jsonify(result)
@@ -149,7 +148,7 @@ def add_lessson_classroom (clid) :
     except :
         return jsonify(False)
     return jsonify(True)
-@app.route("/lesson_classroom/delete/teacher/<lid>",methods = ["DELETE"])
+@app.route("/lesson_classroom/delete/teacher/<lid>",methods = ["GET"])
 def delete_lessson_classroom (lid) :
     try :
         get_database("file_lesson").delete_one({"id_lesson" : lid})
@@ -262,15 +261,16 @@ def get_home_user_classroom (uid) :
     result = {"data":data,"classroom" : classroom }
     return jsonify(result)
 
-@app.route("/home/users/<uid>/classroom/all",methods = ["GET"])
+@app.route("/home/users/classroom/allclassroom/<uid>",methods = ["GET"])
 def get_home_user_classeachtime (uid) :
 
     data = get_database("users").find_one({"id_user": uid},{"_id" : 0,"password":0 ,"id_classroom" : 0})
     data_classroom = get_database("users").find_one({"id_user": uid},{"_id" : 0,"id_classroom" : 1})["id_classroom"]
     get_nameclassroom = list(get_database("classroom").find({"id_classroom" : {"$in" : data_classroom}},{"_id":0 , "name_classroom": 1, "icon_classroom" : 1, "id_classroom" : 1}))
-    
-    result = {"data":data , "id_classroom": data_classroom , "dataclassroom" :get_nameclassroom }
+    result = {"data":data , "dataclassroom" :get_nameclassroom }
     return jsonify(result)
+
+
 @app.route("/name_classroom/<clid>",methods = ["GET"])
 def name_classroom (clid) :
     name = get_database("classroom").find_one({"id_classroom" : clid},{"_id" : 0,"name_classroom" : 1})["name_classroom"]
