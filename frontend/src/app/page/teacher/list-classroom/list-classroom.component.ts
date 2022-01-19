@@ -27,6 +27,7 @@ export class ListClassroomComponent implements OnInit {
     let res = await this.service.add_classroom({"name_classroom" : this.name_classroom.value},this.uid)
     console.log(res)
     this.res_data =  await this.service.teacher_home(this.uid);
+
   }
   edit_classroom(clid : string){
     this.Edit_Classroom.emit(clid)
@@ -34,5 +35,6 @@ export class ListClassroomComponent implements OnInit {
   async delete_classroom(clid : string){
     await this.service.delete_classroom(clid);
     this.res_data =  await this.service.teacher_home(this.uid);
+
   }
 }

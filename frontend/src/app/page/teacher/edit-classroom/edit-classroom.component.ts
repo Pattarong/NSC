@@ -17,6 +17,14 @@ export class EditClassroomComponent implements OnInit {
     "name" : "Not",
     "surename" : "Found"
   }
+  data_add_lesson:any = {
+    "deadline" : "",
+    "lesson_picture" : "",
+    "name" : ""
+  }
+  status_layout = [true,false,false];
+
+
   res_lesson:any
   constructor(
     private a_router : ActivatedRoute,
@@ -30,9 +38,7 @@ export class EditClassroomComponent implements OnInit {
     this.res_data =   await this.service.teacher_home(this.uid);
     this.res_lesson = await this.service.call_lesson(this.clid);
     this.name_classroom = await this.service.name_classroom(this.clid);
-    console.log(this.clid)
-    console.log(this.uid)
-    console.log(this.res_data)
+    console.log(this.res_lesson)
   }
   goToLink(Link : string,Param : boolean){
     if (Param){
@@ -42,7 +48,23 @@ export class EditClassroomComponent implements OnInit {
       this.router.navigate([Link]);
     }
   }
-  add_lesson(){
-
+  async add_lesson(){
+    this.data_add_lesson["name"] = this.name_lesson.value;
+    this.service.add_lesson(this.clid,this.data_add_lesson);
+    this.data_update();
+  }
+  async delete_lesson(lid : string){
+    this.service.delete_lesson(lid)
+    this.res_data = await this.data_update()
+  }
+  status_change(index : number){
+    for(let i = 0;i < 3;i++){
+      this.status_layout[i] = false
+    }
+    this.status_layout[index] = true
+  }
+  async data_update(){
+    this.res_lesson = await this.service.call_lesson(this.clid);
+    window.location.reload();
   }
 }

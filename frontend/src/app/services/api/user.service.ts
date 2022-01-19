@@ -49,4 +49,15 @@ export class UserService {
     this.res = await this.db.get(this.Api+"/name_classroom/"+clid)
     return this.res.data;
   }
+  async delete_lesson(lid : string){
+    await this.db.get(this.Api+"/lesson_classroom/delete/teacher/"+lid)
+  }
+  async add_lesson(clid : string,data : any){
+    await this.db.post(this.Api+"/lesson_classroom/add/teacher/"+clid,data)
+  }
+  async user_classroom(clid : string){
+    this.res = await this.db.get(this.Api+"/users_classroom/teacher/"+clid)
+    return this.res.data;
+  }
+
 }
