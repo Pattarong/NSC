@@ -67,4 +67,7 @@ export class EditClassroomComponent implements OnInit {
     this.res_lesson = await this.service.call_lesson(this.clid);
     window.location.reload();
   }
+  goTO_setting_lesson(lid : string){
+    this.router.navigate(["setting/lesson/"+lid])
+  }
 }

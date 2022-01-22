@@ -30,6 +30,10 @@ import { ListClassroomComponent } from './page/teacher/list-classroom/list-class
 import { EditClassroomComponent } from './page/teacher/edit-classroom/edit-classroom.component';
 import { ListStudentComponent } from './page/student/list-student/list-student.component';
 import { SettingLessonComponent } from './page/teacher/setting-lesson/setting-lesson.component';
+import { QuizComponent } from './page/teacher/quiz/quiz.component';
+import { UploadFormComponent } from './components/upload-form/upload-form.component';
+import { UploadListComponent } from './components/upload-list/upload-list.component';
+import { UploadDetailsComponent } from './components/upload-details/upload-details.component';
 
 @NgModule({
   declarations: [
@@ -47,6 +51,10 @@ import { SettingLessonComponent } from './page/teacher/setting-lesson/setting-le
     UserClassroomComponent,
     ListStudentComponent,
     SettingLessonComponent,
+    QuizComponent,
+    UploadFormComponent,
+    UploadListComponent,
+    UploadDetailsComponent,
   ],
   imports: [
     BrowserModule,
@@ -64,7 +72,8 @@ import { SettingLessonComponent } from './page/teacher/setting-lesson/setting-le
     MatDatepickerModule,
     MatInputModule,
     MatTableModule,
-    MatSelectModule
+    MatSelectModule,
+
   ],
   providers: [],
   bootstrap: [AppComponent]
