@@ -1,1 +1,305 @@
-<p>quiz works!</p>
+<mat-card style="margin: 10px;">{{data_qid.id_question}}
+  <mat-form-field appearance="fill" style="margin: 10px;">
+    <mat-label>Type Question</mat-label>
+    <mat-select [(value)]="type" required = 'true' (valueChange)="Update_Type()">
+      <mat-option value= 1>1</mat-option>
+      <mat-option value= 2>2</mat-option>
+      <mat-option value= 3>3</mat-option>
+      <mat-option value= 4>4</mat-option>
+      <mat-option value= 5>5</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <input type="number" placeholder="hour" >
+  <input type="number" placeholder="minute" >
+  <div *ngIf="data_qid.pattern.type == 1">
+    <main >
+      <div class="container ">
+          <h1 class="h2" style="font-size: 200%; ">รูปแบบที่ 1 เลือกคำตอบที่ถูกได้เพียง 1 คำตอบ</h1>
+        </div>
+      <div>
+      </div>
+  </main>
+  <main >
+
+  <div class="container" >
+      <div class="form-floating mb-3">
+          <input type="text" class="form-control" id="floatingInput" placeholder="คำถาม">
+          <label for="floatingInput">คำถาม</label>
+        </div>
+  </div>
+  <div class="container" >
+      <div class="form-floating mb-3">
+      <form action="/action_page.php">
+          <h1 style="font-size: 150%;">อัพโหลดไฟล์รูปภาพหรือวิดิโอ</h1>
+          <input type="file" id="myFile" name="filename">
+          <input type="submit">
+        </form>
+      </div>
+  </div>
+  <div class="container" >
+      <div class="form-floating mb-3">
+          <input type="text" class="form-control" id="floatingInput" placeholder="คำตอบถูก">
+          <label for="floatingInput">คำตอบถูก</label>
+  </div>
+  </div>
+    <div class="container" >
+      <div class="form-floating mb-3">
+          <input type="text" class="form-control" id="floatingInput" placeholder="คำตอบผิด">
+          <label for="floatingInput">คำตอบผิด</label>
+        </div>
+  </div>
+  </main>
+  </div>
+  <div *ngIf="data_qid.pattern.type == 2">
+    <main class="col-md-9  col-lg-20 px-md-4 py-4 ">
+      <div class="container ">
+          <h1 class="h2" style="font-size: 200%; ">รูปแบบที่ 2 เลือกคำตอบที่ถูกได้มากกว่า 1 คำตอบ</h1>
+        </div>
+      <div>
+      </div>
+  </main>
+  <main class="col-md-9  col-lg-9 px-md-5 py-1 ">
+
+  <div class="container" >
+      <div class="form-floating mb-3">
+          <input type="text" class="form-control" id="floatingInput" placeholder="คำถาม">
+          <label for="floatingInput">คำถาม</label>
+        </div>
+  </div>
+  <div class="container" >
+      <div class="form-floating mb-3">
+      <form action="/action_page.php">
+          <h1 style="font-size: 150%;">อัพโหลดไฟล์รูปภาพหรือวิดิโอ</h1>
+          <input type="file" id="myFile" name="filename">
+          <input type="submit">
+        </form>
+      </div>
+  </div>
+  <div class="container" >
+      <div class="form-floating mb-3">
+          <input type="text" class="form-control" id="floatingInput" placeholder="คำตอบถูก">
+          <label for="floatingInput">คำตอบที่ 1</label>
+  </div>
+  </div>
+    <div class="container" >
+      <div class="form-floating mb-3">
+          <input type="text" class="form-control" id="floatingInput" placeholder="คำตอบผิด">
+          <label for="floatingInput">คำตอบที่ 2</label>
+        </div>
+  </div>
+  </main>
+  <main class="col-md-9  col-lg-9 px-md-5 py-1 ">
+      <div class="container" >
+
+          <button type="button" class="btn btn-outline-secondary" style="font-size: 100%;">+ เพิ่มคำตอบ</button>
+        </div>
+
+      </main>
+  </div>
+  <div *ngIf="data_qid.pattern.type == 3">
+    <main class="col-md-9  col-lg-20 px-md-4 py-4 ">
+      <div class="container ">
+          <h1 class="h2" style="font-size: 200%; ">รูปแบบที่ 3 สุ่มตัวแปรและตรวจคำตอบเป็นคำตอบของสมการที่กำหนด</h1>
+        </div>
+      <div>
+      </div>
+  </main>
+  <main class="col-md-9  col-lg-9 px-md-5 py-1 ">
+
+  <div class="container" >
+      <div class="form-floating mb-3">
+          <input type="text" class="form-control" id="floatingInput" placeholder="คำถาม">
+          <label for="floatingInput">คำถาม</label>
+        </div>
+  </div>
+  <div class="container" >
+      <div class="form-floating mb-3">
+      <form action="/action_page.php">
+          <h1 style="font-size: 150%;">อัพโหลดไฟล์รูปภาพหรือวิดิโอ</h1>
+          <input type="file" id="myFile" name="filename">
+          <input type="submit">
+        </form>
+      </div>
+  </div>
+  <div class="container" >
+      <div class="form-floating mb-3">
+          <input type="text" class="form-control" id="floatingInput" placeholder="คำตอบของสมการ">
+          <label for="floatingInput">คำตอบของสมการ </label>
+  </div>
+  </div>
+    <div class="container" >
+      <div class="form-floating mb-3" >
+       <h1 style="font-size: 180%;">ตัวแปร</h1>
+       <h1 style="font-size: 125%;">ชื่อตัวแปร</h1>
+      </div>
+  </div>
+  </main>
+  <main class="col-md-9  col-lg-9 px-md-5 py-1 ">
+        <div class="container" >
+        <div class="form-floating mb-3">
+
+            <input type="text" class="form-control" id="floatingInput" placeholder="ชื่อตัวแปร">
+            <label for="floatingInput">ชื่อตัวแปร </label>
+    </div>
+  </div>
+  <div class="container" >
+    <div class="input-group mb-3">
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+            <label class="form-check-label" for="flexCheckDefault" style="font-size:100% ;">
+             จำนวนเต็ม
+            </label>
+          </div>
+    </div>
+    </div>
+    <div class="container" >
+      <div class="input-group mb-3">
+          <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+              <label class="form-check-label" for="flexCheckDefault" style="font-size:100% ;">
+               ทศนิยม
+               <input class="form-cheack-input" type="text" placeholder="จำนวนตำแหน่งทศนิยม">
+              </label>
+
+            </div>
+      </div>
+      </div>
+    </main>
+  <main class="col-md-9  col-lg-9 px-md-5 py-1 ">
+      <div class="container" >
+
+          <button type="button" class="btn btn-outline-secondary" style="font-size: 100%;">+ เพิ่มตัวแปร</button>
+        </div>
+
+  </main>
+  </div>
+  <div *ngIf="data_qid.pattern.type == 4">
+    <main class="col-md-9  col-lg-20 px-md-4 py-4 ">
+      <div class="container ">
+          <h1 class="h2" style="font-size: 200%; ">รูปแบบที่ 4  คำตอบที่เป็นข้อความ</h1>
+        </div>
+      <div>
+      </div>
+  </main>
+  <main class="col-md-9  col-lg-9 px-md-5 py-1 ">
+
+  <div class="container" >
+      <div class="form-floating mb-3">
+          <input type="text" class="form-control" id="floatingInput" placeholder="คำถาม">
+          <label for="floatingInput">คำถาม</label>
+        </div>
+  </div>
+  <div class="container" >
+      <div class="form-floating mb-3">
+      <form action="/action_page.php">
+          <h1 style="font-size: 150%;">อัพโหลดไฟล์รูปภาพหรือวิดิโอ</h1>
+          <input type="file" id="myFile" name="filename">
+          <input type="submit">
+        </form>
+      </div>
+  </div>
+
+  </main>
+  </div>
+  <div *ngIf="data_qid.pattern.type == 5">
+    <main class="col-md-9  col-lg-20 px-md-4 py-4 ">
+      <div class="container ">
+          <h1 class="h2" style="font-size: 200%; ">รูปแบบที่ 5 แนบไฟล์คำตอบ</h1>
+        </div>
+      <div>
+      </div>
+  </main>
+  <main class="col-md-9  col-lg-9 px-md-5 py-1 ">
+
+  <div class="container" >
+      <div class="form-floating mb-3">
+          <input type="text" class="form-control" id="floatingInput" placeholder="คำถาม">
+          <label for="floatingInput">คำถาม</label>
+        </div>
+  </div>
+  <div class="container" >
+      <div class="form-floating mb-3">
+      <form action="/action_page.php">
+          <h1 style="font-size: 150%;">อัพโหลดไฟล์รูปภาพหรือวิดิโอ</h1>
+          <input type="file" id="myFile" name="filename">
+          <input type="submit">
+        </form>
+      </div>
+  </div>
+  <div class="container ">
+      <h1 class="h2" style="font-size: 150%; ">ประเภทของไฟล์ที่อนุญาติให้อัพโหลด</h1>
+    </div>
+  <div>
+  </div>
+  <div class="container" >
+  <div class="input-group mb-3">
+      <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+          <label class="form-check-label" for="flexCheckDefault" style="font-size:100% ;">
+           PNG
+          </label>
+        </div>
+  </div>
+  </div>
+  <div class="container" >
+      <div class="input-group mb-3">
+          <div class="form-check">
+              <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+              <label class="form-check-label" for="flexCheckDefault" style="font-size:100% ;">
+               JPEG
+              </label>
+            </div>
+      </div>
+      </div>
+      <div class="container" >
+          <div class="input-group mb-3">
+              <div class="form-check">
+                  <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                  <label class="form-check-label" for="flexCheckDefault" style="font-size:100% ;">
+                   PDF
+                  </label>
+                </div>
+          </div>
+          </div>
+          <div class="container" >
+              <div class="input-group mb-3">
+                  <div class="form-check">
+                      <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                      <label class="form-check-label" for="flexCheckDefault" style="font-size:100% ;">
+                       POWERPOINT
+                      </label>
+                    </div>
+              </div>
+              </div>
+              <div class="container" >
+                  <div class="input-group mb-3">
+                      <div class="form-check">
+                          <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                          <label class="form-check-label" for="flexCheckDefault" style="font-size:100% ;">
+                           EXCEL
+                          </label>
+                        </div>
+                  </div>
+                  </div>
+                  <div class="container" >
+                      <div class="input-group mb-3">
+                          <div class="form-check">
+                              <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                              <label class="form-check-label" for="flexCheckDefault" style="font-size:100% ;">
+                               WORD
+                              </label>
+                            </div>
+                      </div>
+                      </div>
+  </main>
+
+  </div>
+  <mat-card-actions >
+    <div style="text-align:center">
+      <button  class="bn5" (click)="ngOnInit()">Edit</button>
+      <button  class="bn6" (click)="ngOnInit()">Delete</button>
+    </div>
+
+  </mat-card-actions>
+</mat-card>
+

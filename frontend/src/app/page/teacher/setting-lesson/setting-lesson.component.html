@@ -82,18 +82,18 @@
 
   <mat-divider></mat-divider>
 
-  <button mat-button class="menu-button" >
+  <button mat-button class="menu-button" (click)="goTo_editclassroom()">
       <mat-icon>keyboard_return</mat-icon>
       <span>Return</span>
   </button>
-  <button mat-button class="menu-button" >
+  <button mat-button class="menu-button" (click)="goTo_login()">
     <mat-icon>logout</mat-icon>
     <span>Logout</span>
 </button>
 </mat-sidenav>
-  <mat-sidenav-content style="height: auto;">
+  <mat-sidenav-content >
     <div class="content mat-elevation-z8" >
-      <div class="container-fluid" style="padding : 10px;">
+      <div class="container-fluid" style="padding : 30px;">
         <div class="container-fluid;width:100%;">
           <div class = "row" >
             <div class="form-floating mb-3">
@@ -104,22 +104,69 @@
           </div>
           <div class = "row">
              <div class = "col">
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" >
-                <label class="form-check-label" for="flexCheckDefault">
-                  Default checkbox
-                </label>
+              <mat-form-field appearance="fill">
+                <mat-label>Deadline</mat-label>
+                <mat-select [(value)]="select_deadline">
+                  <mat-option value="None" >None</mat-option>
+                  <mat-option value=""> {{datetime_ | date:'medium'}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+
+               <mat-form-field appearance="fill" style="margin: 10px;">
+                <mat-label>Mindmap</mat-label>
+                <mat-select [(value)]="select_mindmap" (valueChange)="Change_datetime()">
+                  <mat-option value="None" >None</mat-option>
+                  <mat-option value="option1">Done</mat-option>
+                </mat-select>
+              </mat-form-field><br>
+              <div *ngIf="select_deadline != 'None'" style="width: 40%;border: 10px;">
+                <app-datetime (Datetime)="Set_Datetime($event)" ></app-datetime>
+
+
               </div>
             </div>
             <div class = "col">
-              1
+              File Docment
             </div>
           </div>
-            <div class = "row">
-              <input type="file" >
+            <div class = "row" >
+              <div style="height: auto;text-align: center;">
+                <youtube-player
+                  videoId="wqhdi6ZgzEg"
+                  suggestedQuality="highres"
+
+                  [startSeconds]="4"
+                  [endSeconds]="8">
+                </youtube-player>
+
+              </div>
+
+
+
+            </div>
+            <div class = "row" >
+              <div *ngFor="let data of res_dataquestion">
+                  <app-quiz   [data_qid] = data></app-quiz>
+              </div>
             </div>
             <div class = "row">
-              3
+              <mat-card>
+                Add Question
+               <br>
+                  <form >
+                    <mat-form-field appearance="fill" style="margin: 10px;">
+                      <mat-label>Type Question</mat-label>
+                      <mat-select [(value)]="type_question" required = 'true'>
+                        <mat-option value= 1 >1</mat-option>
+                        <mat-option value= 2>2</mat-option>
+                        <mat-option value= 3>3</mat-option>
+                        <mat-option value= 4>4</mat-option>
+                        <mat-option value= 5>5</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                      <button type="submit" (click)="add_question()">Add Question</button>
+                  </form>
+              </mat-card>
             </div>
         </div>
 

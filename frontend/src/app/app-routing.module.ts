@@ -17,7 +17,7 @@ const routes: Routes = [
   {path:"teacher/home/:id",component:TeacherHomeComponent},
   {path:"student/home/:id",component:StudentHomeComponent},
   {path :"edit/lesson/:clid/:uid",component:EditClassroomComponent},
-  {path : "setting/lesson/:lid", component:SettingLessonComponent}
+  {path : "setting/lesson/:clid/:lid/:uid", component:SettingLessonComponent}
 ];
 
 @NgModule({

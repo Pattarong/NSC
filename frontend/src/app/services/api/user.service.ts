@@ -63,4 +63,15 @@ export class UserService {
     this.res = await this.db.get(this.Api+"/name_lesson/"+lid)
     return this.res.data
   }
+  async data_lesson(lid : string){
+    this.res = await this.db.get(this.Api+"/data_lesson/"+lid)
+    return this.res.data
+  }
+  async add_question(lid : string,data : any){
+    this.res = await this.db.post(this.Api+"/question_classroom/add/teacher/"+lid,data)
+  }
+  async find_question(lid : string){
+    this.res = await this.db.get(this.Api+"/question_classroom/find/teacher/"+lid)
+    return this.res.data
+  }
 }

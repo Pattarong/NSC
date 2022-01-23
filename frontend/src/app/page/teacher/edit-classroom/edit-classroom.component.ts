@@ -13,12 +13,13 @@ export class EditClassroomComponent implements OnInit {
   clid = ""
   uid = ""
   name_classroom = {"name_classroom" : ""}
+  select_datetime = "None"
   res_data : any = {
     "name" : "Not",
     "surename" : "Found"
   }
   data_add_lesson:any = {
-    "deadline" : "",
+    "deadline" : "None",
     "lesson_picture" : "",
     "name" : ""
   }
@@ -50,6 +51,7 @@ export class EditClassroomComponent implements OnInit {
   }
   async add_lesson(){
     this.data_add_lesson["name"] = this.name_lesson.value;
+
     this.service.add_lesson(this.clid,this.data_add_lesson);
     this.data_update();
   }
@@ -68,6 +70,16 @@ export class EditClassroomComponent implements OnInit {
     window.location.reload();
   }
   goTO_setting_lesson(lid : string){
-    this.router.navigate(["setting/lesson/"+lid])
+    this.router.navigate(["setting/lesson/"+this.clid+"/"+lid+"/"+this.uid])
+  }
+  Datetime(datetime : string){
+      this.data_add_lesson["deadline"] = datetime
+  }
+  Change_status(){
+    if(this.select_datetime == 'None'){
+      this.data_add_lesson["deadline"] = 'None'
+      console.log(this.data_add_lesson["deadline"])
+    }
+
   }
 }

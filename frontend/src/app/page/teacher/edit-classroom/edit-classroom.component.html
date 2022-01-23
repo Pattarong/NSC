@@ -144,7 +144,14 @@
                   <div>
                     <input type="text" [formControl] = "name_lesson" style="height: auto;width: 100%; " placeholder = "Name Lesson">
                   </div>
-                  <app-datetime style="width: max-content;"></app-datetime>
+                  <mat-form-field appearance="fill" style="margin: 10px;">
+                    <mat-label>Deadline</mat-label>
+                    <mat-select [(value)]="select_datetime" (selectionChange)="Change_status()">
+                      <mat-option value="None" >None</mat-option>
+                      <mat-option value="option1">Done</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <app-datetime style="width: max-content;" (Datetime)="Datetime($event)" *ngIf="select_datetime != 'None'" ></app-datetime>
                 </div>
 
               </mat-card-content>

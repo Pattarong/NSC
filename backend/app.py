@@ -158,6 +158,10 @@ def delete_lessson_classroom (lid) :
     except :
         jsonify(False)
     return jsonify(True)
+@app.route("/lesson_classroom/edit/teacher/<lid>",methods = ["GET"])
+def edit_lessson_classroom (lid) :
+    
+    return
 #add_question=================================================================
 @app.route("/question_classroom/add/teacher/<lid>",methods = ["POST"])
 def add_question_classroom (lid) :
@@ -275,3 +279,13 @@ def get_home_user_classeachtime (uid) :
 def name_classroom (clid) :
     name = get_database("classroom").find_one({"id_classroom" : clid},{"_id" : 0,"name_classroom" : 1})["name_classroom"]
     return jsonify({"name_classroom" : name})
+
+@app.route("/name_lesson/<lid>",methods = ["GET"])
+def name_lesson (lid) :
+    name = get_database("file_lesson").find_one({"id_lesson" : lid},{"_id" : 0,"name" : 1})["name"]
+    return jsonify(name)
+
+@app.route("/data_lesson/<lid>",methods = ["GET"])
+def data_lesson (lid) :
+    result = get_database("file_lesson").find_one({"id_lesson" : lid},{"_id" : 0})
+    return jsonify(result)
