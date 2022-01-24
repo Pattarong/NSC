@@ -36,6 +36,8 @@ import { QuizComponent } from './page/teacher/quiz/quiz.component';
 import { UploadFormComponent } from './components/upload-form/upload-form.component';
 import { UploadListComponent } from './components/upload-list/upload-list.component';
 import { UploadDetailsComponent } from './components/upload-details/upload-details.component';
+import { TableStuComponent } from './page/student/table-stu/table-stu.component';
+import { AddListComponent } from './page/teacher/add-list/add-list.component';
 
 
 @NgModule({
@@ -58,6 +60,8 @@ import { UploadDetailsComponent } from './components/upload-details/upload-detai
     UploadFormComponent,
     UploadListComponent,
     UploadDetailsComponent,
+    TableStuComponent,
+    AddListComponent,
 
   ],
   imports: [

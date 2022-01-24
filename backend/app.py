@@ -186,7 +186,7 @@ def add_question_classroom (lid) :
 def edit_question_classroom (lid,qid) :
     data_json = request.get_json()
     try :
-        get_database("question").update_one({"id_lesson" : lid,"id_question" : qid},{"$set" :data_json})
+        get_database("question").update_one({"id_lesson" : lid,"id_question" : qid},{"$set" : data_json})
     except :
         jsonify(False)
     return jsonify(True)

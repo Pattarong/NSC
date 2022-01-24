@@ -24,7 +24,7 @@
   <div class="container" >
       <div class="form-floating mb-3">
           <input type="text" class="form-control" id="floatingInput" placeholder="คำถาม">
-          <label for="floatingInput">คำถาม</label>
+          <label for="floatingInput">คำถาม {{pattern[1]["question"]}}</label>
         </div>
   </div>
   <div class="container" >
@@ -38,14 +38,24 @@
   </div>
   <div class="container" >
       <div class="form-floating mb-3">
+          <label for="floatingInput">คำตอบถูก : {{pattern[1]["ans_correct"]}}</label>
           <input type="text" class="form-control" id="floatingInput" placeholder="คำตอบถูก">
-          <label for="floatingInput">คำตอบถูก</label>
+
   </div>
   </div>
     <div class="container" >
       <div class="form-floating mb-3">
-          <input type="text" class="form-control" id="floatingInput" placeholder="คำตอบผิด">
           <label for="floatingInput">คำตอบผิด</label>
+          <input type="text" class="form-control" id="floatingInput" placeholder="คำตอบผิด" #incorrect_1>
+          <button type="submit" style="margin: 15px;" (click)="Add_incorrect_1(incorrect_1.value)">Add Incorrect</button>
+          <mat-card *ngFor="let list_incorrect of pattern[1]['ans_incorrect'] let i = index" style="margin: 15px;">
+            <div class="row" >
+                  <div class = "col">{{list_incorrect}}</div>
+                  <div  class = "col" style="text-align:right"><button  class="bn6" (click)="Delete_incorrect_1(i)">Delete</button></div>
+            </div>
+
+          </mat-card>
+
         </div>
   </div>
   </main>
@@ -296,7 +306,7 @@
   </div>
   <mat-card-actions >
     <div style="text-align:center">
-      <button  class="bn5" (click)="ngOnInit()">Edit</button>
+      <button  class="bn5" (click)="Edit_Quiz()">Edit</button>
       <button  class="bn6" (click)="ngOnInit()">Delete</button>
     </div>
 

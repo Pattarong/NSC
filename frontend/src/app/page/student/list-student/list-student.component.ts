@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { UserService } from 'src/app/services/api/user.service';
 @Component({
   selector: 'app-list-student',
@@ -7,6 +7,7 @@ import { UserService } from 'src/app/services/api/user.service';
 })
 export class ListStudentComponent implements OnInit {
   res_data:any = {}
+  @Input() data_classroom : any[] | undefined
   constructor(
     private service : UserService
   ) { }
