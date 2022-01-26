@@ -38,6 +38,7 @@ import { UploadListComponent } from './components/upload-list/upload-list.compon
 import { UploadDetailsComponent } from './components/upload-details/upload-details.component';
 import { TableStuComponent } from './page/student/table-stu/table-stu.component';
 import { AddListComponent } from './page/teacher/add-list/add-list.component';
+import { LearnLessonComponent } from './page/student/learn-lesson/learn-lesson.component';
 
 
 @NgModule({
@@ -62,6 +63,7 @@ import { AddListComponent } from './page/teacher/add-list/add-list.component';
     UploadDetailsComponent,
     TableStuComponent,
     AddListComponent,
+    LearnLessonComponent,
 
   ],
   imports: [

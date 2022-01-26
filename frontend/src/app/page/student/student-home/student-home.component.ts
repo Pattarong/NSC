@@ -12,7 +12,7 @@ export class StudentHomeComponent implements OnInit {
   @ViewChild(MatSidenav)
   sidenav! : MatSidenav;
   uid = "";
-  res_data? : any;
+  res_data : any ;
   constructor(
     private observer : BreakpointObserver,
     private a_router : ActivatedRoute,
@@ -21,7 +21,7 @@ export class StudentHomeComponent implements OnInit {
 
   async ngOnInit() {
     this.uid = this.a_router.snapshot.params["id"];
-    this.res_data =  await this.service.teacher_home(this.uid);
+    this.res_data = await this.service.data_classroom_user(this.uid)
     console.log(this.res_data)
   }
   ngAfterViewInit() {

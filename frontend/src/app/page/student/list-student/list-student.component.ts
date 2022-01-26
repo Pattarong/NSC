@@ -12,8 +12,7 @@ export class ListStudentComponent implements OnInit {
     private service : UserService
   ) { }
 
-  ngOnInit(): void {
-
+  async ngOnInit() {
   }
 
 }

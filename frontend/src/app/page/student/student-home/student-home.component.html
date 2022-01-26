@@ -75,7 +75,7 @@
 <mat-sidenav-container>
   <mat-sidenav class="mat-elevation-z8"#sidenav="matSidenav" >
   <img class="avatar mat-elevation-z8" src="https://source.unsplash.com/c_GmwfHBDzk/200x200" />
-<h4 class="name">{{res_data.name}}  {{res_data.surename}}  </h4>
+<h4 class="name">{{res_data.data.name}}  {{res_data.data.surename}}  </h4>
 <h5 >Student</h5>
 
 <mat-divider></mat-divider>
@@ -109,7 +109,7 @@
 </mat-sidenav>
 <mat-sidenav-content >
     <div class="content mat-elevation-z8">
-      <app-list-student [data_classroom]=""></app-list-student>
+      <app-list-student [data_classroom]="res_data.dataclassroom"></app-list-student>
       1
     </div>
 

@@ -257,23 +257,24 @@ def Authen_user() :
         return jsonify(False)
 
 
-#user
-@app.route("/home/users/<uid>/classroom",methods = ["GET"])
-def get_home_user_classroom (uid) :
-    data = get_database("users").find_one({"id_user": uid},{"_id" : 0,"password":0 ,"id_classroom " : 0})
-    classroom = get_database("users").find({"id_user": uid},{"_id" : 0 , "id_classroom " : 1})
-    result = {"data":data,"classroom" : classroom }
-    return jsonify(result)
-
+#user##########################################################################
 @app.route("/home/users/classroom/allclassroom/<uid>",methods = ["GET"])
 def get_home_user_classeachtime (uid) :
-
-    data = get_database("users").find_one({"id_user": uid},{"_id" : 0,"password":0 ,"id_classroom" : 0})
+    data_profile = get_database("users").find_one({"id_user": uid},{"_id" : 0,"password":0 ,"id_classroom" : 0})
     data_classroom = get_database("users").find_one({"id_user": uid},{"_id" : 0,"id_classroom" : 1})["id_classroom"]
     get_nameclassroom = list(get_database("classroom").find({"id_classroom" : {"$in" : data_classroom}},{"_id":0 , "name_classroom": 1, "icon_classroom" : 1, "id_classroom" : 1}))
-    result = {"data":data , "dataclassroom" :get_nameclassroom }
+    result = {"data":data_profile , "dataclassroom" :get_nameclassroom }
     return jsonify(result)
 
+@app.route("/home/users/classroom/<uid>/<clid>",methods = ["GET"])
+def get_home_user_classroom_in (uid,clid) :
+    data_profile = get_database("users").find_one({"id_user": uid},{"_id" : 0,"password":0 ,"id_classroom" : 0})
+    data_in_classroom = get_database("classroom").find_one({ "id_classroom" : clid},{"_id" : 0,"owner" : 0,"id_lesson" : 0})
+    data_classroom_lesson = (get_database("classroom").find_one({"id_classroom" :clid},{"_id":0 , "id_lesson" : 1}))["id_lesson"]
+    get_namelesson = list(get_database("file_lesson").find({ "id_lesson" : { "$in" : list(data_classroom_lesson)}},{"_id":0 , "id_lesson" : 1 ,"name" :1}))
+    result = {"data":data_profile , "in_classroom" : data_in_classroom , "lesson" : data_classroom_lesson, "name_lesson" : get_namelesson}
+    return jsonify(result)
+############################################################
 
 @app.route("/name_classroom/<clid>",methods = ["GET"])
 def name_classroom (clid) :

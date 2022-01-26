@@ -1,7 +1,7 @@
 <div class="content" style="padding: 20px; " >
   <div fxLayout="row wrap" fxLayoutGap="16px grid" >
-    <div fxFlex="25%" *ngFor="let classroom of res_data.list_classroom">
-      <mat-card class="mat-elevation-z4" style="padding-bottom: 20px;">
+    <div fxFlex="25%" *ngFor="let classroom of data_classroom" >
+      <mat-card class="mat-elevation-z4" style="padding-bottom: 20px;" style="min-width: 400px; width: 25%;">
         <mat-card-header>
           <mat-card-title>Room {{classroom.index}} {{classroom.name_classroom}}</mat-card-title>
             </mat-card-header>
@@ -10,6 +10,7 @@
           <p>
             The Himalayas is a mountain range in Asia.
           </p>
+          <button  class="bn5" >Click</button>
         </mat-card-content>
       </mat-card>
     </div>
