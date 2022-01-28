@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-
+import { FormControl } from '@angular/forms';
 @Component({
   selector: 'app-quiz',
   templateUrl: './quiz.component.html',
@@ -7,7 +7,13 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class QuizComponent implements OnInit {
   @Input() data_qid : any = ""
+  question = new FormControl('')
+  equation = new FormControl('')
+  max = new FormControl('')
+  min = new FormControl('')
   type : number | undefined
+  type_number  = 1
+
   constructor() { }
   pattern = [
     {},
@@ -52,23 +58,42 @@ export class QuizComponent implements OnInit {
   }
   Update_Type(){
     this.data_qid.pattern.type = this.type
+    if(this.type == 1){
+      this.pattern[1]["ans_correct"] = []
+    }
   }
   Edit_Quiz(){
     console.log(this.type)
-    if (this.type == 1){
+    console.log(this.question.value)
+    console.log(this.pattern)
+    console.log(this.equation.value)
+    console.log(this.max.value)
+    console.log(this.min.value)
+  }
+  Add_incorrect(text : string,index : number){
+    if (this.pattern[index]["ans_incorrect"] == undefined){
+      this.pattern[index]["ans_incorrect"] = []
+    }
+      this.pattern[index]["ans_incorrect"].push(text)
 
-    }
   }
-  Add_incorrect_1(text : string){
-    if (this.pattern[1]["ans_incorrect"] == undefined){
-      this.pattern[1]["ans_incorrect"] = []
+  Add_correct(text : string,index : number){
+    if (this.pattern[index]["ans_correct"] == undefined){
+      this.pattern[index]["ans_correct"] = []
     }
-    this.pattern[1]["ans_incorrect"].push(text)
+    if (index == 1){
+      this.pattern[index]["ans_correct"][0] = text
+    }
+    else{
+      this.pattern[index]["ans_correct"].push(text)
+    }
+
   }
-  Delete_incorrect_1(index : number){
-    console.log(index)
-    this.pattern[1]["ans_incorrect"] = this.arrayRemove( this.pattern[1]["ans_incorrect"], index)
-    console.log( this.pattern[1]["ans_incorrect"])
+  Delete_incorrect(element : number,index : number){
+    this.pattern[index]["ans_incorrect"] = this.arrayRemove( this.pattern[index]["ans_incorrect"], element)
+  }
+  Delete_correct(element : number,index : number){
+    this.pattern[index]["ans_correct"] = this.arrayRemove( this.pattern[index]["ans_correct"], element)
   }
   arrayRemove(arr : any, value : number) {
     console.log(1)
@@ -79,5 +104,8 @@ export class QuizComponent implements OnInit {
       }
     }
     return arr_ps
-}
+  }
+  Add_Question(type : number , key : string,data : any){
+
+  }
 }

@@ -13,6 +13,7 @@ export class StudentHomeComponent implements OnInit {
   sidenav! : MatSidenav;
   uid = "";
   res_data : any ;
+  PageLayout = [true,false]
   constructor(
     private observer : BreakpointObserver,
     private a_router : ActivatedRoute,
@@ -41,6 +42,14 @@ export class StudentHomeComponent implements OnInit {
     }
     else{
       this.router.navigate([Link]);
+    }
+  }
+  Change_Layout(index : number ){
+    if (index == 0){
+      this.PageLayout = [true,false]
+    }
+    else{
+      this.PageLayout = [false,true]
     }
   }
 }

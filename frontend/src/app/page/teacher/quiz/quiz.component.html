@@ -23,7 +23,7 @@
 
   <div class="container" >
       <div class="form-floating mb-3">
-          <input type="text" class="form-control" id="floatingInput" placeholder="คำถาม">
+          <input type="text" class="form-control" id="floatingInput" placeholder="คำถาม" [formControl] = 'question'>
           <label for="floatingInput">คำถาม {{pattern[1]["question"]}}</label>
         </div>
   </div>
@@ -39,7 +39,15 @@
   <div class="container" >
       <div class="form-floating mb-3">
           <label for="floatingInput">คำตอบถูก : {{pattern[1]["ans_correct"]}}</label>
-          <input type="text" class="form-control" id="floatingInput" placeholder="คำตอบถูก">
+          <input type="text" class="form-control" id="floatingInput" placeholder="คำตอบถูก" #correct_1>
+          <button type="button" class="btn btn-outline-secondary" style="font-size: 100%;margin: 10px;" (click)="Add_correct(correct_1.value,1)">+ เพิ่มคำตอบ</button>
+          <mat-card  style="margin: 15px;" *ngFor="let correct of pattern[1]['ans_correct']">
+            <div class="row" >
+                  <div class = "col">{{correct}}</div>
+                  <div  class = "col" style="text-align:right"><button  class="bn6" (click)="Delete_correct(0,1)">Delete</button></div>
+            </div>
+
+          </mat-card>
 
   </div>
   </div>
@@ -47,11 +55,11 @@
       <div class="form-floating mb-3">
           <label for="floatingInput">คำตอบผิด</label>
           <input type="text" class="form-control" id="floatingInput" placeholder="คำตอบผิด" #incorrect_1>
-          <button type="submit" style="margin: 15px;" (click)="Add_incorrect_1(incorrect_1.value)">Add Incorrect</button>
+          <button type="button" class="btn btn-outline-secondary" style="font-size: 100%;margin: 10px;" (click)="Add_incorrect(incorrect_1.value,1)">+ เพิ่มคำตอบ</button>
           <mat-card *ngFor="let list_incorrect of pattern[1]['ans_incorrect'] let i = index" style="margin: 15px;">
             <div class="row" >
                   <div class = "col">{{list_incorrect}}</div>
-                  <div  class = "col" style="text-align:right"><button  class="bn6" (click)="Delete_incorrect_1(i)">Delete</button></div>
+                  <div  class = "col" style="text-align:right"><button  class="bn6" (click)="Delete_incorrect(i,1)">Delete</button></div>
             </div>
 
           </mat-card>
@@ -72,7 +80,7 @@
 
   <div class="container" >
       <div class="form-floating mb-3">
-          <input type="text" class="form-control" id="floatingInput" placeholder="คำถาม">
+          <input type="text" class="form-control" id="floatingInput" placeholder="คำถาม" [formControl] = 'question' >
           <label for="floatingInput">คำถาม</label>
         </div>
   </div>
@@ -86,25 +94,37 @@
       </div>
   </div>
   <div class="container" >
-      <div class="form-floating mb-3">
-          <input type="text" class="form-control" id="floatingInput" placeholder="คำตอบถูก">
-          <label for="floatingInput">คำตอบที่ 1</label>
-  </div>
-  </div>
-    <div class="container" >
-      <div class="form-floating mb-3">
-          <input type="text" class="form-control" id="floatingInput" placeholder="คำตอบผิด">
-          <label for="floatingInput">คำตอบที่ 2</label>
-        </div>
-  </div>
+    <div class="form-floating mb-3">
+        <label for="floatingInput">คำตอบถูก : {{pattern[1]["ans_correct"]}}</label>
+        <input type="text" class="form-control" id="floatingInput" placeholder="คำตอบถูก" #correct_2>
+        <button type="button" class="btn btn-outline-secondary" style="font-size: 100%;margin: 10px;" (click)="Add_correct(correct_2.value,2)">+ เพิ่มคำตอบ</button>
+        <mat-card  style="margin: 15px;" *ngFor="let correct of pattern[2]['ans_correct'] let i = index">
+          <div class="row" >
+                <div class = "col">{{correct}}</div>
+                <div  class = "col" style="text-align:right"><button  class="bn6" (click)="Delete_correct(i,2)">Delete</button></div>
+          </div>
+
+        </mat-card>
+
+</div>
+</div>
+  <div class="container" >
+    <div class="form-floating mb-3">
+        <label for="floatingInput">คำตอบผิด</label>
+        <input type="text" class="form-control" id="floatingInput" placeholder="คำตอบผิด" #incorrect_2>
+        <button type="button" class="btn btn-outline-secondary" style="font-size: 100%;margin: 10px;" (click)="Add_incorrect(incorrect_2.value,2)">+ เพิ่มคำตอบ</button>
+        <mat-card *ngFor="let list_incorrect of pattern[2]['ans_incorrect'] let i = index" style="margin: 15px;">
+          <div class="row" >
+                <div class = "col">{{list_incorrect}}</div>
+                <div  class = "col" style="text-align:right"><button  class="bn6" (click)="Delete_incorrect(i,2)">Delete</button></div>
+          </div>
+
+        </mat-card>
+
+      </div>
+</div>
   </main>
-  <main class="col-md-9  col-lg-9 px-md-5 py-1 ">
-      <div class="container" >
 
-          <button type="button" class="btn btn-outline-secondary" style="font-size: 100%;">+ เพิ่มคำตอบ</button>
-        </div>
-
-      </main>
   </div>
   <div *ngIf="data_qid.pattern.type == 3">
     <main class="col-md-9  col-lg-20 px-md-4 py-4 ">
@@ -114,79 +134,88 @@
       <div>
       </div>
   </main>
-  <main class="col-md-9  col-lg-9 px-md-5 py-1 ">
+<main class="col-md-9  col-lg-9 px-md-5 py-1 ">
 
-  <div class="container" >
-      <div class="form-floating mb-3">
-          <input type="text" class="form-control" id="floatingInput" placeholder="คำถาม">
-          <label for="floatingInput">คำถาม</label>
-        </div>
-  </div>
-  <div class="container" >
-      <div class="form-floating mb-3">
-      <form action="/action_page.php">
-          <h1 style="font-size: 150%;">อัพโหลดไฟล์รูปภาพหรือวิดิโอ</h1>
-          <input type="file" id="myFile" name="filename">
-          <input type="submit">
-        </form>
+<div class="container" >
+    <div class="form-floating mb-3">
+        <input type="text" class="form-control" id="floatingInput" placeholder="คำถาม" [formControl] = 'question' >
+        <label for="floatingInput">คำถาม</label>
       </div>
-  </div>
-  <div class="container" >
-      <div class="form-floating mb-3">
-          <input type="text" class="form-control" id="floatingInput" placeholder="คำตอบของสมการ">
-          <label for="floatingInput">คำตอบของสมการ </label>
-  </div>
-  </div>
-    <div class="container" >
-      <div class="form-floating mb-3" >
-       <h1 style="font-size: 180%;">ตัวแปร</h1>
-       <h1 style="font-size: 125%;">ชื่อตัวแปร</h1>
-      </div>
-  </div>
-  </main>
-  <main class="col-md-9  col-lg-9 px-md-5 py-1 ">
-        <div class="container" >
-        <div class="form-floating mb-3">
-
-            <input type="text" class="form-control" id="floatingInput" placeholder="ชื่อตัวแปร">
-            <label for="floatingInput">ชื่อตัวแปร </label>
+</div>
+<div class="container" >
+    <div class="form-floating mb-3">
+    <form action="/action_page.php">
+        <h1 style="font-size: 150%;">อัพโหลดไฟล์รูปภาพหรือวิดิโอ</h1>
+        <input type="file" id="myFile" name="filename">
+        <input type="submit">
+      </form>
     </div>
-  </div>
+</div>
+<div class="container" >
+    <div class="form-floating mb-3">
+        <input type="text" class="form-control" id="floatingInput" placeholder="คำตอบของสมการ" [formControl] = 'equation'>
+        <label for="floatingInput">คำตอบของสมการ </label>
+</div>
+</div>
   <div class="container" >
-    <div class="input-group mb-3">
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-            <label class="form-check-label" for="flexCheckDefault" style="font-size:100% ;">
-             จำนวนเต็ม
-            </label>
-          </div>
+    <div class="form-floating mb-3" >
+     <h1 style="font-size: 180%;">ตัวแปร</h1><br><br>
+     <h1 style="font-size: 150%;">ชื่อตัวแปร</h1>
     </div>
-    </div>
-    <div class="container" >
-      <div class="input-group mb-3">
-          <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-              <label class="form-check-label" for="flexCheckDefault" style="font-size:100% ;">
-               ทศนิยม
-               <input class="form-cheack-input" type="text" placeholder="จำนวนตำแหน่งทศนิยม">
-              </label>
-
-            </div>
-      </div>
-      </div>
-    </main>
-  <main class="col-md-9  col-lg-9 px-md-5 py-1 ">
+</div>
+</main>
+<main class="col-md-9  col-lg-9 px-md-5 py-1 ">
       <div class="container" >
+      <div class="form-floating mb-3">
 
-          <button type="button" class="btn btn-outline-secondary" style="font-size: 100%;">+ เพิ่มตัวแปร</button>
-        </div>
+          <input type="text" class="form-control" id="floatingInput" placeholder="ชื่อตัวแปร">
+          <label for="floatingInput">type </label>
+          <mat-form-field appearance="fill" style="margin: 10px;">
+            <mat-label>Type Variable</mat-label>
+            <mat-select [(value)]="type_number" >
+              <mat-option value= 1>Int</mat-option>
+              <mat-option value= 2>Float</mat-option>
 
+            </mat-select>
+          </mat-form-field>
+  </div>
+</div>
+<div class="container" *ngIf="type_number == 1">
+  <div>
+          <div>
+            <input type="number" [formControl] = 'max' placeholder="max">
+           to
+           <input type="number" [formControl] = 'min' placeholder="min">
+          </div>
+
+  </div>
+  </div>
+  <div class="container" *ngIf="type_number == 2">
+    <div>
+      <div>
+        .xxx <input type = "number" style="margin: 10px;">
+      </div>
+      <div>
+        <input type="number" [formControl] = 'max' placeholder="max">
+       to
+       <input type="number" [formControl] = 'min' placeholder="min">
+      </div>
+
+</div>
+    </div>
   </main>
+<main class="col-md-9  col-lg-9 px-md-5 py-1 ">
+    <div class="container" >
+
+        <button type="button" class="btn btn-outline-secondary" style="font-size: 100%;">+ เพิ่มตัวแปร</button>
+      </div>
+
+</main>
   </div>
   <div *ngIf="data_qid.pattern.type == 4">
     <main class="col-md-9  col-lg-20 px-md-4 py-4 ">
       <div class="container ">
-          <h1 class="h2" style="font-size: 200%; ">รูปแบบที่ 4  คำตอบที่เป็นข้อความ</h1>
+          <h1 class="h2" style="font-size: 200%; ">รูปแบบที่ 4 คำตอบที่เป็นข้อความ</h1>
         </div>
       <div>
       </div>
@@ -195,7 +224,7 @@
 
   <div class="container" >
       <div class="form-floating mb-3">
-          <input type="text" class="form-control" id="floatingInput" placeholder="คำถาม">
+          <input type="text" class="form-control" id="floatingInput" placeholder="คำถาม" [formControl] = 'question'>
           <label for="floatingInput">คำถาม</label>
         </div>
   </div>
@@ -223,7 +252,7 @@
 
   <div class="container" >
       <div class="form-floating mb-3">
-          <input type="text" class="form-control" id="floatingInput" placeholder="คำถาม">
+          <input type="text" class="form-control" id="floatingInput" placeholder="คำถาม" [formControl] = 'question'>
           <label for="floatingInput">คำถาม</label>
         </div>
   </div>
@@ -307,7 +336,7 @@
   <mat-card-actions >
     <div style="text-align:center">
       <button  class="bn5" (click)="Edit_Quiz()">Edit</button>
-      <button  class="bn6" (click)="ngOnInit()">Delete</button>
+      <button  class="bn6" >Delete</button>
     </div>
 
   </mat-card-actions>

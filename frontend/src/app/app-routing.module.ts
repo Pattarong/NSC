@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './page/home/home.component';
 import { LoginComponent } from './page/login/login.component';
 import { RegisterComponent } from './page/register/register.component';
+import { LessonStuComponent } from './page/student/lesson-stu/lesson-stu.component';
 import { StudentHomeComponent } from './page/student/student-home/student-home.component';
 import { EditClassroomComponent } from './page/teacher/edit-classroom/edit-classroom.component';
 import { SettingLessonComponent } from './page/teacher/setting-lesson/setting-lesson.component';
@@ -17,7 +18,8 @@ const routes: Routes = [
   {path:"teacher/home/:id",component:TeacherHomeComponent},
   {path:"student/home/:id",component:StudentHomeComponent},
   {path :"edit/lesson/:clid/:uid",component:EditClassroomComponent},
-  {path : "setting/lesson/:clid/:lid/:uid", component:SettingLessonComponent}
+  {path : "setting/lesson/:clid/:lid/:uid", component:SettingLessonComponent},
+  {path : "lesson/stu/:uid/:clid",component:LessonStuComponent}
 ];
 
 @NgModule({

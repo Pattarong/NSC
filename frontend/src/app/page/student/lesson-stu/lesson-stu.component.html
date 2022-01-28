@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -79,40 +80,49 @@
 <h5 >Student</h5>
 
 <mat-divider></mat-divider>
-  <button mat-button class="menu-button" (click)="Change_Layout(0)">
-      <mat-icon>home</mat-icon>
-      <span>Home</span>
-  </button>
-  <button mat-button class="menu-button">
-      <mat-icon>person</mat-icon>
-      <span>Profile</span>
-  </button>
+
   <button mat-button class="menu-button" (click)="goToLink('teacher/home/',true)">
       <mat-icon>autorenew</mat-icon>
       <span>Chang Role Teacher</span>
   </button>
-  <button mat-button class="menu-button" (click)="Change_Layout(1)">
-    <mat-icon>table</mat-icon>
-    <span>Table</span>
-  </button>
 
   <mat-divider></mat-divider>
 
-  <button mat-button class="menu-button" (click)="goToLink('user-mode/',true)">
+  <button mat-button class="menu-button" >
       <mat-icon>keyboard_return</mat-icon>
       <span>Return</span>
   </button>
-  <button mat-button class="menu-button" (click)="goToLink('login',false)">
+  <button mat-button class="menu-button" >
     <mat-icon>logout</mat-icon>
     <span>Logout</span>
 </button>
 </mat-sidenav>
 <mat-sidenav-content >
     <div class="content mat-elevation-z8">
-      <app-list-student [data_classroom]="res_data.dataclassroom" *ngIf="PageLayout[0]" [uid] = "uid"></app-list-student>
-      <app-table *ngIf="PageLayout[1]"></app-table>
+      <div class="content" style="padding: 20px; " >
+        <div fxLayout="row wrap" fxLayoutGap="16px grid" >
+          <div fxFlex="25%" *ngFor="let lesson of res_data.name_lesson " >
+            <mat-card class="mat-elevation-z4" style="padding-bottom: 20px;" style="min-width: 400px; width: 25%;">
+              <mat-card-header>
+                <mat-card-title> {{lesson.name}}</mat-card-title>
+                  </mat-card-header>
+                    <img mat-card-image src="https://th.bing.com/th/id/R.75fa5877a652a06107ff13391f54bcd9?rik=mD413LBj2%2bDVzQ&riu=http%3a%2f%2f3.bp.blogspot.com%2f_SQcbQs_Hg48%2fS0xiaUOPTbI%2fAAAAAAAAAf0%2fmgUi5c4IHyk%2fs400%2fEikichi_Onizuka_28.jpg&ehk=33swp3DKsHlT24VPV8R4JKl69tQCg8C2ixqylhjczQw%3d&risl=&pid=ImgRaw&r=0">
+                  <mat-card-content>
+                <p>
+                  The Himalayas is a mountain range in Asia.
+                </p>
+                <button  class="bn5" >Start</button>
+              </mat-card-content>
+            </mat-card>
+          </div>
+          <div >
+
+
+
+          </div>
+        </div>
+      </div>
     </div>
 
 </mat-sidenav-content>
 </mat-sidenav-container>
-
