@@ -178,7 +178,7 @@ def add_question_classroom (lid) :
         get_database("question").insert_one(create)
         get_database("studentboard").update_many({"id_lesson" : lid},{ "$push" : {"point" : {"id_question" : qid , "point" : 0}}})
         get_database("studentboard").update_many({"id_lesson" : lid},{ "$push" : {"answer_student" : {"id_question" : qid , "answer" : ""}}})
-    except :
+    except :                                                       
         return jsonify(False)
     return jsonify(True)
 

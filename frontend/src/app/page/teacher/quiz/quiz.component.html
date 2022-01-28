@@ -159,7 +159,19 @@
 </div>
   <div class="container" >
     <div class="form-floating mb-3" >
-     <h1 style="font-size: 180%;">ตัวแปร</h1><br><br>
+     <h1 style="font-size: 180%;">ตัวแปร</h1>
+     <mat-card style="margin: 10px;" *ngIf="variable.value != ''">
+        <div *ngIf="type_number == 1 ">
+            {{variable.value}}<br>
+            range : {{max.value}} to {{min.value}}
+        </div>
+        <div *ngIf="type_number == 2">
+          {{variable.value}}
+          <br>
+            range : {{max.value}} to {{min.value}}  <br>
+            point  : {{point_float.value}}
+        </div>
+     </mat-card>
      <h1 style="font-size: 150%;">ชื่อตัวแปร</h1>
     </div>
 </div>
@@ -168,7 +180,7 @@
       <div class="container" >
       <div class="form-floating mb-3">
 
-          <input type="text" class="form-control" id="floatingInput" placeholder="ชื่อตัวแปร">
+          <input type="text" class="form-control" id="floatingInput" placeholder="ชื่อตัวแปร" [formControl] = "variable">
           <label for="floatingInput">type </label>
           <mat-form-field appearance="fill" style="margin: 10px;">
             <mat-label>Type Variable</mat-label>
@@ -193,7 +205,7 @@
   <div class="container" *ngIf="type_number == 2">
     <div>
       <div>
-        .xxx <input type = "number" style="margin: 10px;">
+        .xxx <input type = "number" style="margin: 10px;" [formControl] = 'point_float'>
       </div>
       <div>
         <input type="number" [formControl] = 'max' placeholder="max">
@@ -207,7 +219,7 @@
 <main class="col-md-9  col-lg-9 px-md-5 py-1 ">
     <div class="container" >
 
-        <button type="button" class="btn btn-outline-secondary" style="font-size: 100%;">+ เพิ่มตัวแปร</button>
+        <button type="button" class="btn btn-outline-secondary" style="font-size: 100%;" (click)="Add_Variable()">+ เพิ่มตัวแปร</button>
       </div>
 
 </main>
@@ -267,72 +279,46 @@
   </div>
   <div class="container ">
       <h1 class="h2" style="font-size: 150%; ">ประเภทของไฟล์ที่อนุญาติให้อัพโหลด</h1>
+      <mat-card *ngFor="let sure of pattern[5]['list_type_file'] let i = index" style="margin: 10px;">
+        <div class="row">
+            <div class="col">
+                {{sure}}
+            </div>
+          <div style="text-align: right;" class = "col">
+            <button  class="bn6" (click)="Delete_surefile(i)">Delete</button>
+          </div>
+        </div>
+
+
+      </mat-card>
+      <mat-form-field appearance="fill" style="margin: 10px;">
+        <mat-label>Surefile</mat-label>
+        <mat-select [(value)]="pick_surefile" >
+          <mat-option  *ngFor="let sure of list_surenamefile"  value= {{sure}}>
+            {{sure}}
+
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+                        <button type="button" class="btn btn-outline-secondary" style="font-size: 100%;" (click)="Add_Surefile()">+ เพิ่มนามสกุลไฟล์</button>
+
     </div>
   <div>
   </div>
-  <div class="container" >
-  <div class="input-group mb-3">
-      <div class="form-check">
-          <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-          <label class="form-check-label" for="flexCheckDefault" style="font-size:100% ;">
-           PNG
-          </label>
-        </div>
-  </div>
-  </div>
-  <div class="container" >
-      <div class="input-group mb-3">
-          <div class="form-check">
-              <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-              <label class="form-check-label" for="flexCheckDefault" style="font-size:100% ;">
-               JPEG
-              </label>
-            </div>
-      </div>
-      </div>
-      <div class="container" >
-          <div class="input-group mb-3">
-              <div class="form-check">
-                  <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                  <label class="form-check-label" for="flexCheckDefault" style="font-size:100% ;">
-                   PDF
-                  </label>
-                </div>
-          </div>
-          </div>
-          <div class="container" >
-              <div class="input-group mb-3">
-                  <div class="form-check">
-                      <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                      <label class="form-check-label" for="flexCheckDefault" style="font-size:100% ;">
-                       POWERPOINT
-                      </label>
-                    </div>
-              </div>
-              </div>
-              <div class="container" >
-                  <div class="input-group mb-3">
-                      <div class="form-check">
-                          <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                          <label class="form-check-label" for="flexCheckDefault" style="font-size:100% ;">
-                           EXCEL
-                          </label>
-                        </div>
-                  </div>
-                  </div>
-                  <div class="container" >
-                      <div class="input-group mb-3">
-                          <div class="form-check">
-                              <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                              <label class="form-check-label" for="flexCheckDefault" style="font-size:100% ;">
-                               WORD
-                              </label>
-                            </div>
-                      </div>
-                      </div>
+
   </main>
 
   </div>
+    <mat-form-field appearance="fill" style="margin: 10px;">
+    <mat-label>Point</mat-label>
+    <mat-select [(value)]="add_point" >
+      <mat-option value= "None">None</mat-option>
+      <mat-option value= "Done">Done</mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-card *ngIf="add_point == 'Done'" >
+      point : <input type="number" placeholder="point">
+  </mat-card>
   <mat-card-actions >
     <div style="text-align:center">
       <button  class="bn5" (click)="Edit_Quiz()">Edit</button>

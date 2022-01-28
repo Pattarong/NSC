@@ -9,11 +9,16 @@ export class QuizComponent implements OnInit {
   @Input() data_qid : any = ""
   question = new FormControl('')
   equation = new FormControl('')
-  max = new FormControl('')
-  min = new FormControl('')
+  max = new FormControl('0')
+  min = new FormControl('0')
+  variable = new FormControl('not have variable')
+  point_float = new FormControl('0')
+  surefile = new FormControl('')
   type : number | undefined
   type_number  = 1
-
+  list_surenamefile = ["png","jpeg","pdf","pptx",'xlsx',"doc"]
+  pick_surefile = "png"
+  add_point = "None"
   constructor() { }
   pattern = [
     {},
@@ -54,7 +59,9 @@ export class QuizComponent implements OnInit {
   ngOnInit(): void {
     console.log(this.data_qid)
     this.type = this.data_qid.pattern.type
-
+    if(this.pattern[5]["list_type_file"] == undefined){
+      this.pattern[5]["list_type_file"] = []
+    }
   }
   Update_Type(){
     this.data_qid.pattern.type = this.type
@@ -69,6 +76,8 @@ export class QuizComponent implements OnInit {
     console.log(this.equation.value)
     console.log(this.max.value)
     console.log(this.min.value)
+    console.log(this.variable.value)
+    console.log(this.pattern[3]["variable"])
   }
   Add_incorrect(text : string,index : number){
     if (this.pattern[index]["ans_incorrect"] == undefined){
@@ -89,11 +98,25 @@ export class QuizComponent implements OnInit {
     }
 
   }
+  Add_Surefile(){
+    if(this.pattern[5]["list_type_file"] == undefined){
+      this.pattern[5]["list_type_file"] = []
+    }
+    if(this.pattern[5]["list_type_file"].indexOf(this.pick_surefile)  < 0){
+      this.pattern[5]["list_type_file"].push(this.pick_surefile)
+      console.log(this.pattern[5]["list_type_file"])
+      console.log(this.pick_surefile)
+    }
+
+  }
   Delete_incorrect(element : number,index : number){
     this.pattern[index]["ans_incorrect"] = this.arrayRemove( this.pattern[index]["ans_incorrect"], element)
   }
   Delete_correct(element : number,index : number){
     this.pattern[index]["ans_correct"] = this.arrayRemove( this.pattern[index]["ans_correct"], element)
+  }
+  Delete_surefile(element : number){
+    this.pattern[5]["list_type_file"] = this.arrayRemove( this.pattern[5]["list_type_file"], element)
   }
   arrayRemove(arr : any, value : number) {
     console.log(1)
@@ -107,5 +130,27 @@ export class QuizComponent implements OnInit {
   }
   Add_Question(type : number , key : string,data : any){
 
+  }
+  Add_Variable(){
+    if (this.max.value > this.min.value && this.max.value != "" && this.min.value != "" && this.variable.value != ''){
+      this.pattern[3]["variable"] = {
+          "max" : this.max.value,
+          "min" : this.min.value,
+          "key" : this.variable.value
+        }
+      if(this.type_number == 1){
+        this.pattern[3]["variable"]["type"] = "int"
+      }
+      else if (this.type_number == 2){
+        this.pattern[3]["variable"]["type"] = "float"
+        this.pattern[3]["variable"]["point"] = this.point_float.value
+      }
+    }
+  }
+  Check_typepoint(){
+    if ([1,2,3].indexOf(this.type_number) >= 0){
+      return true
+    }
+    return false
   }
 }
