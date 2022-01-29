@@ -1,9 +1,11 @@
+from ast import pattern
 from flask import Flask, json, jsonify, request
 from bson import objectid
 import hashlib
 from jinja2.environment import create_cache
 from pymongo import results
 import jwt
+from numpy import random
 from flask_cors import CORS
 
 app = Flask(__name__)
@@ -186,7 +188,7 @@ def add_question_classroom (lid) :
 def edit_question_classroom (lid,qid) :
     data_json = request.get_json()
     try :
-        get_database("question").update_one({"id_lesson" : lid,"id_question" : qid},{"$set" : data_json})
+        get_database("question").update_many({"id_lesson" : lid,"id_question" : qid},{"$set" : data_json})
     except :
         jsonify(False)
     return jsonify(True)
@@ -236,12 +238,6 @@ def check_answer_user (uid,lid,qid) :
         jsonify(False)
     return jsonify(True)
 
-@app.route("/test/<uid>/<lid>/<qid>",methods = ["POST"])
-def Test (uid,lid,qid) :
-    data_json = request.get_json()
-    get_database("studentboard").update_many({"id_user" : uid,"id_lesson" : lid ,"answer_student" : {"$elemMatch" : {"id_question" : qid}}},{"$set" : {"answer_student.$.answer" : data_json["answer"]}})
-    return jsonify(True)
-
 @app.route("/authen/user",methods = ["POST"])
 def Authen_user() :
     data_json = request.get_json()
@@ -274,7 +270,7 @@ def get_home_user_classroom_in (uid,clid) :
     get_namelesson = list(get_database("file_lesson").find({ "id_lesson" : { "$in" : list(data_classroom_lesson)}},{"_id":0 , "id_lesson" : 1 ,"name" :1}))
     result = {"data":data_profile , "in_classroom" : data_in_classroom , "lesson" : data_classroom_lesson, "name_lesson" : get_namelesson}
     return jsonify(result)
-############################################################
+############################
 
 @app.route("/name_classroom/<clid>",methods = ["GET"])
 def name_classroom (clid) :

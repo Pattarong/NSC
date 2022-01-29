@@ -1,25 +1,30 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { UserService } from 'src/app/services/api/user.service';
 @Component({
   selector: 'app-quiz',
   templateUrl: './quiz.component.html',
   styleUrls: ['./quiz.component.scss']
 })
 export class QuizComponent implements OnInit {
-  @Input() data_qid : any = ""
+  @Input() data_qid : any = {}
+  @Input() lid : string = ''
   question = new FormControl('')
   equation = new FormControl('')
   max = new FormControl('0')
   min = new FormControl('0')
-  variable = new FormControl('not have variable')
+  variable = new FormControl('')
   point_float = new FormControl('0')
   surefile = new FormControl('')
-  type : number | undefined
+  hour = new FormControl('0')
+  minute = new FormControl('0')
+  type = 1
   type_number  = 1
   list_surenamefile = ["png","jpeg","pdf","pptx",'xlsx',"doc"]
-  pick_surefile = "png"
+  pick_surefile = ""
   add_point = "None"
-  constructor() { }
+  point = new FormControl('0')
+  constructor(private service : UserService) { }
   pattern = [
     {},
     {
@@ -39,7 +44,7 @@ export class QuizComponent implements OnInit {
     {
       "type" : 3,
       "question" : this.data_qid.question,
-      "ans_correct" : this.data_qid.ans_correct,
+      "equation" : this.data_qid.ans_correct,
       "variable" :  this.data_qid.variable,
       "path_question" : this.data_qid.path_question
 
@@ -62,6 +67,23 @@ export class QuizComponent implements OnInit {
     if(this.pattern[5]["list_type_file"] == undefined){
       this.pattern[5]["list_type_file"] = []
     }
+    this.pattern[this.type]["question"] = this.data_qid.pattern.question
+    this.pattern[this.type]["path_question"] = this.data_qid.pattern.path_question
+    if (this.type == 1){
+      this.pattern[this.type]["ans_correct"] = this.data_qid.pattern.ans_correct
+      this.pattern[this.type]["ans_incorrect"] = this.data_qid.pattern.ans_incorrect
+    }
+    else if (this.type == 2){
+      this.pattern[this.type]["ans_correct"] = this.data_qid.pattern.ans_correct
+      this.pattern[this.type]["ans_incorrect"] = this.data_qid.pattern.ans_incorrect
+    }
+    else if (this.type == 3){
+      this.pattern[this.type]["equation"] = this.data_qid.pattern.equation
+      this.pattern[this.type]["variable"] = this.data_qid.pattern.variable
+    }
+    else if (this.type == 5){
+      this.pattern[this.type]["list_type_file"] = this.data_qid.pattern.list_type_file
+    }
   }
   Update_Type(){
     this.data_qid.pattern.type = this.type
@@ -69,7 +91,7 @@ export class QuizComponent implements OnInit {
       this.pattern[1]["ans_correct"] = []
     }
   }
-  Edit_Quiz(){
+  Edit_Quiz(qid : string){
     console.log(this.type)
     console.log(this.question.value)
     console.log(this.pattern)
@@ -78,6 +100,16 @@ export class QuizComponent implements OnInit {
     console.log(this.min.value)
     console.log(this.variable.value)
     console.log(this.pattern[3]["variable"])
+    let data = {
+      "pattern" : this.pattern[this.type],
+      "time" : {
+        "hour" : parseInt(this.hour.value),
+        "minute" : parseInt(this.minute.value)
+      },
+      "point" : parseInt(this.point.value)
+    }
+    this.service.edit_question(this.lid,qid,data)
+    data["pattern"]["question"] = this.question.value
   }
   Add_incorrect(text : string,index : number){
     if (this.pattern[index]["ans_incorrect"] == undefined){
@@ -132,12 +164,13 @@ export class QuizComponent implements OnInit {
 
   }
   Add_Variable(){
-    if (this.max.value > this.min.value && this.max.value != "" && this.min.value != "" && this.variable.value != ''){
+    if (this.max.value > this.min.value  && this.variable.value != ''){
       this.pattern[3]["variable"] = {
           "max" : this.max.value,
           "min" : this.min.value,
           "key" : this.variable.value
         }
+      this.pattern[3]["equation"] = this.equation.value
       if(this.type_number == 1){
         this.pattern[3]["variable"]["type"] = "int"
       }
@@ -147,10 +180,5 @@ export class QuizComponent implements OnInit {
       }
     }
   }
-  Check_typepoint(){
-    if ([1,2,3].indexOf(this.type_number) >= 0){
-      return true
-    }
-    return false
-  }
+
 }

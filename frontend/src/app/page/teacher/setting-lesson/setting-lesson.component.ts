@@ -34,7 +34,6 @@ export class SettingLessonComponent implements OnInit {
     this.select_deadline = await this.res_lesson.deadline
     this.datetime_ = new Date(await this.res_lesson.deadline)
     this.res_dataquestion = await this.service.find_question(this.lid)
-    console.log(this.res_dataquestion)
   }
   Check(){
     this.status_deadline = !this.status_deadline

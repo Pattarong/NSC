@@ -40,6 +40,7 @@ import { AddListComponent } from './page/teacher/add-list/add-list.component';
 import { LearnLessonComponent } from './page/student/learn-lesson/learn-lesson.component';
 import { TableComponent } from './page/student/table/table.component';
 import { LessonStuComponent } from './page/student/lesson-stu/lesson-stu.component';
+import { QuizDisplayComponent } from './page/student/quiz-display/quiz-display.component';
 
 @NgModule({
   declarations: [
@@ -64,7 +65,8 @@ import { LessonStuComponent } from './page/student/lesson-stu/lesson-stu.compone
     AddListComponent,
     LearnLessonComponent,
     TableComponent,
-    LessonStuComponent
+    LessonStuComponent,
+    QuizDisplayComponent
 
   ],
   imports: [

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute,Router } from '@angular/router';
 import { UserService } from 'src/app/services/api/user.service';
 @Component({
   selector: 'app-lesson-stu',
@@ -9,10 +9,15 @@ import { UserService } from 'src/app/services/api/user.service';
 export class LessonStuComponent implements OnInit {
   clid : any
   uid : any
-  res_data : any
+  res_data : any= {
+    "data" : {
+      "name" : "",
+      "surename" : ""
+    }}
   constructor(
     private a_router : ActivatedRoute,
-    private service : UserService
+    private service : UserService,
+    private router : Router
   ) { }
 
   async ngOnInit() {
@@ -21,7 +26,10 @@ export class LessonStuComponent implements OnInit {
     this.res_data = await this.service.data_lesson_user(this.uid,this.clid)
     console.log(this.res_data)
   }
-  goToLink(Link : string,status : boolean){
-
+  Start_Learn(lid : string){
+    this.router.navigate(["learn/lesson/"+this.uid+"/"+this.clid+"/"+lid])
+  }
+  goToHome(){
+    this.router.navigate(["student/home/"+this.uid])
   }
 }

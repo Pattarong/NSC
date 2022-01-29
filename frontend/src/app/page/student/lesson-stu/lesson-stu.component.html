@@ -81,14 +81,14 @@
 
 <mat-divider></mat-divider>
 
-  <button mat-button class="menu-button" (click)="goToLink('teacher/home/',true)">
+  <button mat-button class="menu-button" >
       <mat-icon>autorenew</mat-icon>
       <span>Chang Role Teacher</span>
   </button>
 
   <mat-divider></mat-divider>
 
-  <button mat-button class="menu-button" >
+  <button mat-button class="menu-button" (click)="goToHome()">
       <mat-icon>keyboard_return</mat-icon>
       <span>Return</span>
   </button>
@@ -111,7 +111,7 @@
                 <p>
                   The Himalayas is a mountain range in Asia.
                 </p>
-                <button  class="bn5" >Start</button>
+                <button  class="bn5" (click)="Start_Learn(lesson.id_lesson)">Start</button>
               </mat-card-content>
             </mat-card>
           </div>

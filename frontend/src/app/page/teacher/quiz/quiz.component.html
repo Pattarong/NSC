@@ -1,16 +1,16 @@
 <mat-card style="margin: 10px;">{{data_qid.id_question}}
   <mat-form-field appearance="fill" style="margin: 10px;">
     <mat-label>Type Question</mat-label>
-    <mat-select [(value)]="type" required = 'true' (valueChange)="Update_Type()">
-      <mat-option value= 1>1</mat-option>
-      <mat-option value= 2>2</mat-option>
-      <mat-option value= 3>3</mat-option>
-      <mat-option value= 4>4</mat-option>
-      <mat-option value= 5>5</mat-option>
+    <mat-select [(value)]="type" (valueChange)="Update_Type()">
+      <mat-option value=1>1</mat-option>
+      <mat-option value=2>2</mat-option>
+      <mat-option value=3>3</mat-option>
+      <mat-option value=4>4</mat-option>
+      <mat-option value=5>5</mat-option>
     </mat-select>
   </mat-form-field>
-  <input type="number" placeholder="hour" >
-  <input type="number" placeholder="minute" >
+  <input type="number" placeholder="hour" [formControl] = "hour">
+  <input type="number" placeholder="minute" [formControl] = "minute">
   <div *ngIf="data_qid.pattern.type == 1">
     <main >
       <div class="container ">
@@ -296,7 +296,6 @@
         <mat-select [(value)]="pick_surefile" >
           <mat-option  *ngFor="let sure of list_surenamefile"  value= {{sure}}>
             {{sure}}
-
           </mat-option>
         </mat-select>
       </mat-form-field>
@@ -309,22 +308,22 @@
   </main>
 
   </div>
-    <mat-form-field appearance="fill" style="margin: 10px;">
+ <mat-form-field appearance="fill" style="margin: 10px;">
     <mat-label>Point</mat-label>
     <mat-select [(value)]="add_point" >
       <mat-option value= "None">None</mat-option>
       <mat-option value= "Done">Done</mat-option>
     </mat-select>
+
   </mat-form-field>
   <mat-card *ngIf="add_point == 'Done'" >
-      point : <input type="number" placeholder="point">
+      point : <input type="number" placeholder="point" [formControl] = 'point'>
   </mat-card>
   <mat-card-actions >
     <div style="text-align:center">
-      <button  class="bn5" (click)="Edit_Quiz()">Edit</button>
+      <button  class="bn5" (click)="Edit_Quiz(data_qid.id_question)">Edit</button>
       <button  class="bn6" >Delete</button>
     </div>
-
   </mat-card-actions>
 </mat-card>
 

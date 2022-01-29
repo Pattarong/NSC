@@ -1,0 +1,25 @@
+<mat-card style="margin: 20px; width: auto;">
+    <div>
+      <div>
+          {{data_q.pattern.question}}
+      </div>
+      <div>
+          VDO/IMAGE
+      </div>
+    </div>
+    <div *ngIf="data_q.pattern.type == 1">
+    1
+    </div>
+    <div *ngIf="data_q.pattern.type == 2">
+    2
+    </div>
+    <div *ngIf="data_q.pattern.type == 3">
+    3
+    </div>
+    <div *ngIf="data_q.pattern.type == 4">
+    4
+    </div>
+    <div *ngIf="data_q.pattern.type == 5">
+    5
+    </div>
+</mat-card>

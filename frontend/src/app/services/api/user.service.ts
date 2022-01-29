@@ -82,4 +82,12 @@ export class UserService {
     this.res = await this.db.get(this.Api+"/home/users/classroom/"+uid+"/"+clid)
     return this.res.data
   }
+  async edit_question(lid : string,qid : string,data : any){
+    this.db.patch(this.Api+"/question_classroom/edit/teacher/"+lid+"/"+qid,data)
+  }
+  // Test
+  async random(){
+     this.res =  await this.db.get(this.Api+"/random_arr/")
+     return this.res.data
+  }
 }
