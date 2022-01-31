@@ -1,23 +1,15 @@
 
-from operator import methodcaller
-from tkinter import Variable
+
 from flask import Flask, jsonify, request
 from bson import objectid
 import hashlib
 from jinja2.environment import create_cache
 import random
-
 from pymongo import results
 import jwt
 from flask_cors import CORS
-
-
-
-
-
 app = Flask(__name__)
 CORS(app)
-
 if __name__ == "__main__" :
     app.run(host="0.0.0.0")
 
@@ -483,9 +475,6 @@ def get_home_user_class_priority (uid) :
                             get_nameclassroom[i]["id_lesson"][j]["time"] = (get_stu_status[p]["time"])
                         else :
                             pass
-   
-    
-    
     result = {"data":data_profile , "dataclassroom" :get_nameclassroom   }
     return jsonify(result) 
 @app.route("/edit/filelesson/<lid>",methods = ["PATCH"])
