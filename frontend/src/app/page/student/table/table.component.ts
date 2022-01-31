@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { UserService } from 'src/app/services/api/user.service';
 
 @Component({
   selector: 'app-table',
@@ -6,10 +7,16 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./table.component.scss']
 })
 export class TableComponent implements OnInit {
+  @Input() uid = ''
 
-  constructor() { }
-
-  ngOnInit(): void {
+  constructor(
+    private service : UserService
+  ) { }
+  data_table : any
+  async ngOnInit() {
+    this.data_table = await this.service.Table(this.uid)
+    console.log(this.data_table)
+    console.log(1)
   }
 
 }

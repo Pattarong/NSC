@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "gto-6cde9": {
+      "hosting": {
+        "frontend": [
+          "gto-6cde9"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "gto-6cde9"
+  }
+}

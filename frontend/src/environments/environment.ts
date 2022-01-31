@@ -4,7 +4,16 @@
 
 export const environment = {
   production: false,
-  API_IP : "http://127.0.0.1"
+  API_IP : "http://127.0.0.1",
+  firebase : {
+    apiKey: "AIzaSyCbogmNhisviLEzzbOADdCKUW63_SoV5gs",
+    authDomain: "gto-6cde9.firebaseapp.com",
+    projectId: "gto-6cde9",
+    storageBucket: "gto-6cde9.appspot.com",
+    messagingSenderId: "477040113666",
+    appId: "1:477040113666:web:201629d6aab66476eb4f1b",
+    measurementId: "G-KMBCTHKZBW"
+  }
 };
 
 /*

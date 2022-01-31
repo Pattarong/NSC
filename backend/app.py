@@ -1,12 +1,19 @@
-from ast import pattern
-from flask import Flask, json, jsonify, request
+
+from operator import methodcaller
+from tkinter import Variable
+from flask import Flask, jsonify, request
 from bson import objectid
 import hashlib
 from jinja2.environment import create_cache
+import random
+
 from pymongo import results
 import jwt
-from numpy import random
 from flask_cors import CORS
+
+
+
+
 
 app = Flask(__name__)
 CORS(app)
@@ -196,7 +203,7 @@ def edit_question_classroom (lid,qid) :
 @app.route("/question_classroom/delete/teacher/<lid>/<qid>",methods = ["DELETE"])
 def delete_question_classroom (lid,qid) :
     try :
-        get_database("studentboard").update_many({"id_lesson" : lid,"answer_student" : {"$elemMatch" : {"id_question" : qid}}},{"$pull" : {"answer_student" : {"id_question" : qid}}})
+        get_database("studentboard").update_many({"id_lesson" : lid,"answer_studen" : {"$elemMatch" : {"id_question" : qid}}},{"$pull" : {"answer_studen" : {"id_question" : qid}}})
         get_database("studentboard").update_many({"id_lesson" : lid,"point" : {"$elemMatch" : {"id_question" : qid}}},{"$pull" : {"point" : {"id_question" : qid}}})
         get_database("question").delete_many({"id_lesson" : lid,"id_question" : qid})
     except :
@@ -223,17 +230,40 @@ def check_answer_user (uid,lid,qid) :
     data_json = request.get_json()
     try : 
         type_question = get_database("question").find_one({"id_lesson" : lid,"id_question" : qid},{"_id" : 0,"pattern.type" : 1 })["pattern"]["type"]
-        list_question = [1,2,3]
         data_question = get_database("question").find_one({"id_lesson" : lid,"id_question" : qid},{"_id" : 0,"pattern" : 1})["pattern"]
         point = get_database("question").find_one({"id_lesson" : lid,"id_question" : qid},{"_id" : 0,"point" : 1})["point"]
         get_database("studentboard").update_many({"id_user" : uid,"id_lesson" : lid ,"answer_student" : {"$elemMatch" : {"id_question" : qid}}},{"$set" : {"answer_student.$.answer" : data_json["answer"]}})
-        if type_question in list_question :
-            if data_json["answer"] == data_question["answer"]:
+        if int(type_question) == 1 :
+            if (data_question["ans_correct"][0] == data_json["answer"]) :
+                get_database("studentboard").update_many({"id_user" : uid,"id_lesson" : lid ,"point" : {"$elemMatch" : {"id_question" : qid}}},{"$set" : {"point.$.point" : point}})           
+            else :
+                get_database("studentboard").update_many({"id_user" : uid,"id_lesson" : lid ,"point" : {"$elemMatch" : {"id_question" : qid}}},{"$set" : {"point.$.point" : 0}})
+ 
+        elif int(type_question) == 2 :
+            count = 0
+            for ans in data_json["answer"] :
+                if ans in data_question["ans_correct"] :
+                    count = count+1
+            if count == len(data_question["ans_correct"]) :
                 get_database("studentboard").update_many({"id_user" : uid,"id_lesson" : lid ,"point" : {"$elemMatch" : {"id_question" : qid}}},{"$set" : {"point.$.point" : point}})
             else :
                 get_database("studentboard").update_many({"id_user" : uid,"id_lesson" : lid ,"point" : {"$elemMatch" : {"id_question" : qid}}},{"$set" : {"point.$.point" : 0}})
-        else :
+        elif int(type_question) == 3 :
+            
+            text = str(data_question["equation"]) 
+            equation = text.replace(data_question["variable"]["key"],data_json["variable"])
+            aswer = eval(equation)
+            if float(aswer) == float(data_json["answer"]):
+                get_database("studentboard").update_many({"id_user" : uid,"id_lesson" : lid ,"point" : {"$elemMatch" : {"id_question" : qid}}},{"$set" : {"point.$.point" : point}})
+                print(1)
+            else : 
+                get_database("studentboard").update_many({"id_user" : uid,"id_lesson" : lid ,"point" : {"$elemMatch" : {"id_question" : qid}}},{"$set" : {"point.$.point" : 0}})
+                print(2)
+        elif int(type_question) == 4 :
             get_database("studentboard").update_many({"id_user" : uid,"id_lesson" : lid ,"point" : {"$elemMatch" : {"id_question" : qid}}},{"$set" : {"point.$.point" : 0}})
+        elif int(type_question) == 5 :
+            get_database("studentboard").update_many({"id_user" : uid,"id_lesson" : lid ,"point" : {"$elemMatch" : {"id_question" : qid}}},{"$set" : {"point.$.point" : 0}})
+        return jsonify(False)
     except :
         jsonify(False)
     return jsonify(True)
@@ -286,3 +316,179 @@ def name_lesson (lid) :
 def data_lesson (lid) :
     result = get_database("file_lesson").find_one({"id_lesson" : lid},{"_id" : 0})
     return jsonify(result)
+
+
+@app.route("/home/users/classroom/lesson/<uid>/<lid>/<qid>",methods = ["GET"])
+def get_home_user_lesson_question (uid,lid,qid) :
+    data_profile = get_database("users").find_one({"id_user": uid},{"_id" : 0,"password":0 ,"id_classroom" : 0})
+    get_file_lesson = get_database("file_lesson").find_one({ "id_lesson" : lid},{"_id":0 , "hide" :0 ,"max_question": 0})
+    check_type = list(get_database("question").find({"id_question" : qid ,"id_lesson" : lid},{"_id" : 0 ,"pattern" : {"type" : 1}}))
+    print(check_type[0]["pattern"]["type"])
+    print(type(check_type[0]["pattern"]["type"]))
+    if check_type[0]["pattern"]["type"] == 1 or check_type[0]["pattern"]["type"] ==  2 :
+        get_choice = list(get_database("question").find({"id_question" : qid ,"id_lesson" : lid},{"_id" : 0 ,"pattern" : {"ans_correct" : 1 , "ans_incorrect" : 1}}))
+        get_sum_choice = get_choice[0]["pattern"]["ans_correct"] + get_choice[0]["pattern"]["ans_incorrect"]
+        get_sum_choice_random = random.sample(get_sum_choice,len(get_sum_choice))
+       
+        data_question = list(get_database("question").aggregate([
+            {
+                "$match" : {"$and" : [{"id_lesson" :lid },{"id_question" : qid}]}
+            },
+            {
+            "$project" : 
+            {
+                "_id" : 0 ,
+                "id_lesson" : 1 ,
+                "id_question" : 1 ,
+                "time" : 1 ,
+                "pattern" : 
+                {
+                    "type" : 1 ,
+                    "question" : 1 ,
+                    "choice" : get_sum_choice_random
+                }
+            }
+            }
+        ]))
+    elif check_type[0]["pattern"]["type"] == 3 :
+        get_choice = (get_database("question").find_one({"id_question" : qid ,"id_lesson" : lid},{"_id" : 0 ,"pattern" : {"variable" : 1 }})["pattern"]["variable"])
+        variable = get_choice
+        data_question = list(get_database("question").aggregate([
+            {
+                "$match" : {"$and" : [{"id_lesson" :lid },{"id_question" : qid}]}
+            },
+            {
+            "$project" : 
+            {
+                "_id" : 0 ,
+                "id_lesson" : 1 ,
+                "id_question" : 1 ,
+                "time" : 1 ,
+                "pattern" : 
+                {
+                    "type" : 1 ,
+                    "question" : 1 ,
+                    "variable" : variable
+                }
+            }
+            }
+        ]))
+    elif check_type[0]["pattern"]["type"] == 4 or check_type[0]["pattern"]["type"] ==  5 :
+        data_question = list(get_database("question").aggregate([
+            {
+                "$match" : {"$and" : [{"id_lesson" :lid },{"id_question" : qid}]}
+            },
+            {
+            "$project" : 
+            {
+                "_id" : 0 ,
+                "id_lesson" : 1 ,
+                "id_question" : 1 ,
+                "time" : 1 ,
+                "pattern" : 1
+                
+            }
+            }
+        ]))
+    
+    result = {"data_profile" : data_profile , "lesson" : get_file_lesson  , "data_question" : data_question[0]}
+    return jsonify(result)
+
+@app.route("/home/users/classroom/allclassroom/add_classroom/<uid>",methods = ["POST"])
+def add_classroom_stu (uid) :
+    data_json = request.get_json()
+    print(data_json)
+    count = 0 
+    all_classroom = list(get_database("classroom").find({},{"_id" : 0 , "id_classroom" : 1}))
+    classroom_in_user = list(get_database("users").find({"id_user" : uid},{"_id" : 0 , "id_classroom" : 1}))
+    try :
+       for j in range(len(classroom_in_user[0]["id_classroom"])) :
+           if data_json["id_classroom"] == classroom_in_user[0]["id_classroom"][j]:
+               return jsonify({"status" : "alreadly added"})
+           elif data_json["id_classroom"] != classroom_in_user[0]["id_classroom"][j]:
+               count+=1
+       if count == len(classroom_in_user[0]["id_classroom"]) :
+            for i in range(len(all_classroom)) :
+                if data_json["id_classroom"] == all_classroom[i]["id_classroom"] :
+                    get_database("users").update_many({"id_user" : uid},{ "$push" : {"id_classroom" : data_json["id_classroom"]}})
+                    lesson = get_database("classroom").find_one({"id_classroom" :data_json["id_classroom"] },{"_id" : 0 , "id_lesson" : 1})["id_lesson"]
+                    for p in range(len(lesson)) :
+                        create = {
+                        "id_user" : uid,
+                        "id_classroom" : data_json["id_classroom"],
+                        "id_lesson" : lesson[p],
+                        "point" : [],
+                        "answer_studen" : [],
+                        "start" : "",
+                        "end" : "" ,
+                        "time" : "" ,
+                        "lasttime" : "" ,
+                        "status" : "True" ,
+                        }
+                        get_database("studentboard").insert_one(create)
+
+                    return jsonify(True)           
+                else :
+                    pass
+            return jsonify(False)
+       else :
+           return jsonify(False)
+                
+    except :
+        return jsonify(False)
+    
+    return jsonify(True)
+
+@app.route("/home/users/classroom/priority/<uid>",methods = ["GET"])
+def get_home_user_class_priority (uid) :
+    print(uid)
+    print(type(uid))
+    data_profile = get_database("users").find_one({"id_user": uid},{"_id" : 0,"password":0 ,"id_classroom" : 0})
+    data_classroom = get_database("users").find_one({"id_user": uid},{"_id" : 0,"id_classroom" : 1})["id_classroom"]
+    get_nameclassroom = list(get_database("classroom").find({"id_classroom" : {"$in" : data_classroom}},{"_id":0 , "name_classroom": 1, "id_classroom" : 1, "id_lesson" : 1}))
+    get_stu_status = list(get_database("studentboard").find({"id_user":uid ,"id_classroom" : {"$in" : list(data_classroom)}},{"_id":0 ,"id_classroom" : 1,"id_lesson" : 1,"time" :1}))
+    #print(len(get_nameclassroom))
+    #print(get_nameclassroom[0])
+    for i in range(len(get_nameclassroom)) :
+        if len(get_nameclassroom[i]["id_lesson"]) == 0 :
+            #print(get_nameclassroom[i]["id_classroom"],"empty lesson")
+            pass
+        else :
+            #print(get_nameclassroom[i]["id_lesson"],"have lesson")
+            
+            for j in range(len(get_nameclassroom[i]["id_lesson"])) :
+                name_lesson = list(get_database("file_lesson").aggregate([
+                        {
+                            "$match" : {"id_lesson" : get_nameclassroom[i]["id_lesson"][j] }
+                        },
+                        {
+                        "$project" :
+                            {
+                                "_id" : 0 ,
+                                "id_lesson" : 1 ,
+                                "name" :1 ,
+                                "deadline" : 1
+                            }
+                        
+                        }    
+                ]))
+                if len(name_lesson) == 0 :
+                    pass
+                else :
+                    #print(name_lesson[0])
+                    get_nameclassroom[i]["id_lesson"][j] = name_lesson[0]
+                    for p in range(len(get_stu_status)) :
+                        if get_stu_status[p]["id_classroom"] == get_nameclassroom[i]["id_classroom"] and get_stu_status[p]["id_lesson"] == get_nameclassroom[i]["id_lesson"][j]["id_lesson"] :
+
+                            get_nameclassroom[i]["id_lesson"][j]["time"] = (get_stu_status[p]["time"])
+                        else :
+                            pass
+   
+    
+    
+    result = {"data":data_profile , "dataclassroom" :get_nameclassroom   }
+    return jsonify(result) 
+@app.route("/edit/filelesson/<lid>",methods = ["PATCH"])
+def Edit_lesson(lid) :
+    data_json = request.get_json()
+    get_database("file_lesson").update_one({"id_lesson" : lid},{"$set" : data_json})

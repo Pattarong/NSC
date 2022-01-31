@@ -1,25 +1,62 @@
-<mat-card style="margin: 20px; width: auto;">
+<mat-card style="margin: 20px; width: auto;align-items: center;">
     <div>
       <div>
           {{data_q.pattern.question}}
       </div>
       <div>
           VDO/IMAGE
+
+          <app-uploadfile></app-uploadfile>
       </div>
     </div>
-    <div *ngIf="data_q.pattern.type == 1">
-    1
+
+    <div *ngIf="data_q.pattern.type == 1" style="width: auto;">
+      <label id="example-radio-group-label">Select Only 1 Choice</label>
+      <mat-radio-group
+        aria-labelledby="example-radio-group-label"
+        class="example-radio-group"
+        [(ngModel)]="pick_1">
+          <mat-radio-button class="example-radio-button" *ngFor="let random of list_random" [value]="random">
+            {{random}}
+          </mat-radio-button>
+      </mat-radio-group>
+      <div>Your Choice is : {{pick_1}}</div>
     </div>
     <div *ngIf="data_q.pattern.type == 2">
-    2
+      <form [formGroup]="form" >
+        <mat-form-field>
+          <mat-label>Select Choice More Than 1</mat-label>
+          <mat-select formControlName="random" multiple>
+            <mat-option *ngFor="let random of list_random" [value]="random">
+              {{random}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+<br>
+
+      </form>
     </div>
     <div *ngIf="data_q.pattern.type == 3">
-    3
+      <mat-card>
+        {{data_q.pattern.variable.key}} = {{number_random}}
+      </mat-card>
+      <input type="text" placeholder="Input Answer" style="margin: 10px;" [formControl] = 'pick_3'>
+
     </div>
     <div *ngIf="data_q.pattern.type == 4">
-    4
+      <input type="text" placeholder="Input Answer" style="margin: 10px;" [formControl] = 'pick_4'>
     </div>
     <div *ngIf="data_q.pattern.type == 5">
-    5
+      <mat-card *ngFor="let surefile of data_q.pattern.list_type_file" style="margin: 10px;" >
+        {{surefile}}
+      </mat-card>
+      <div style="text-align: center;">
+        <input type="text" [formControl] = 'pick_5' >
+      </div>
+
     </div>
+    <div style="text-align: center;">
+      <button mat-raised-button color="accent" style="margin: 10px;align-items: center;" (click)="Answer_Question()">Submit</button>
+    </div>
+
 </mat-card>

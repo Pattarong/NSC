@@ -33,15 +33,15 @@ import { EditClassroomComponent } from './page/teacher/edit-classroom/edit-class
 import { ListStudentComponent } from './page/student/list-student/list-student.component';
 import { SettingLessonComponent } from './page/teacher/setting-lesson/setting-lesson.component';
 import { QuizComponent } from './page/teacher/quiz/quiz.component';
-import { UploadFormComponent } from './components/upload-form/upload-form.component';
-import { UploadListComponent } from './components/upload-list/upload-list.component';
-import { UploadDetailsComponent } from './components/upload-details/upload-details.component';
 import { AddListComponent } from './page/teacher/add-list/add-list.component';
 import { LearnLessonComponent } from './page/student/learn-lesson/learn-lesson.component';
 import { TableComponent } from './page/student/table/table.component';
 import { LessonStuComponent } from './page/student/lesson-stu/lesson-stu.component';
 import { QuizDisplayComponent } from './page/student/quiz-display/quiz-display.component';
-
+import { MatRadioModule } from '@angular/material/radio';
+import { UploadfileComponent } from './uploadfile/uploadfile.component';
+import { DataTimeComponent } from './page/student/data-time/data-time.component';
+import { ProfileUserComponent } from './profile-user/profile-user.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -59,15 +59,14 @@ import { QuizDisplayComponent } from './page/student/quiz-display/quiz-display.c
     ListStudentComponent,
     SettingLessonComponent,
     QuizComponent,
-    UploadFormComponent,
-    UploadListComponent,
-    UploadDetailsComponent,
     AddListComponent,
     LearnLessonComponent,
     TableComponent,
     LessonStuComponent,
-    QuizDisplayComponent
-
+    QuizDisplayComponent,
+    UploadfileComponent,
+    DataTimeComponent,
+    ProfileUserComponent
   ],
   imports: [
     BrowserModule,
@@ -87,7 +86,8 @@ import { QuizDisplayComponent } from './page/student/quiz-display/quiz-display.c
     MatTableModule,
     MatSelectModule,
     MatSlideToggleModule,
-    YouTubePlayerModule
+    YouTubePlayerModule,
+    MatRadioModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -23,8 +23,8 @@
 
   <div class="container" >
       <div class="form-floating mb-3">
-          <input type="text" class="form-control" id="floatingInput" placeholder="คำถาม" [formControl] = 'question'>
-          <label for="floatingInput">คำถาม {{pattern[1]["question"]}}</label>
+          <input type="text"   class="form-control"  placeholder="คำถาม" (change)="Question_(q1.value)" #q1>
+          <label for="floatingInput">คำถาม {{question}}</label>
         </div>
   </div>
   <div class="container" >
@@ -38,7 +38,7 @@
   </div>
   <div class="container" >
       <div class="form-floating mb-3">
-          <label for="floatingInput">คำตอบถูก : {{pattern[1]["ans_correct"]}}</label>
+          <label for="floatingInput">คำตอบถูก </label>
           <input type="text" class="form-control" id="floatingInput" placeholder="คำตอบถูก" #correct_1>
           <button type="button" class="btn btn-outline-secondary" style="font-size: 100%;margin: 10px;" (click)="Add_correct(correct_1.value,1)">+ เพิ่มคำตอบ</button>
           <mat-card  style="margin: 15px;" *ngFor="let correct of pattern[1]['ans_correct']">
@@ -80,8 +80,8 @@
 
   <div class="container" >
       <div class="form-floating mb-3">
-          <input type="text" class="form-control" id="floatingInput" placeholder="คำถาม" [formControl] = 'question' >
-          <label for="floatingInput">คำถาม</label>
+          <input type="text" class="form-control" id="floatingInput" placeholder="คำถาม"  (change)="Question_(q2.value)" #q2>
+          <label for="floatingInput">คำถาม {{question}}</label>
         </div>
   </div>
   <div class="container" >
@@ -138,8 +138,8 @@
 
 <div class="container" >
     <div class="form-floating mb-3">
-        <input type="text" class="form-control" id="floatingInput" placeholder="คำถาม" [formControl] = 'question' >
-        <label for="floatingInput">คำถาม</label>
+        <input type="text" class="form-control" id="floatingInput" placeholder="คำถาม" (change)="Question_(q3.value)" #q3 >
+        <label for="floatingInput">คำถาม {{question}}</label>
       </div>
 </div>
 <div class="container" >
@@ -153,8 +153,8 @@
 </div>
 <div class="container" >
     <div class="form-floating mb-3">
-        <input type="text" class="form-control" id="floatingInput" placeholder="คำตอบของสมการ" [formControl] = 'equation'>
-        <label for="floatingInput">คำตอบของสมการ </label>
+        <input type="text" class="form-control" id="floatingInput" placeholder="คำตอบของสมการ"  (change)="Equation_Change(eq.value)" #eq>
+        <label for="floatingInput">คำตอบของสมการ {{equation.value}}</label>
 </div>
 </div>
   <div class="container" >
@@ -236,8 +236,8 @@
 
   <div class="container" >
       <div class="form-floating mb-3">
-          <input type="text" class="form-control" id="floatingInput" placeholder="คำถาม" [formControl] = 'question'>
-          <label for="floatingInput">คำถาม</label>
+          <input type="text" class="form-control" id="floatingInput" placeholder="คำถาม" (change)="Question_(q4.value)" #q4>
+          <label for="floatingInput">คำถาม {{question}}</label>
         </div>
   </div>
   <div class="container" >
@@ -264,8 +264,8 @@
 
   <div class="container" >
       <div class="form-floating mb-3">
-          <input type="text" class="form-control" id="floatingInput" placeholder="คำถาม" [formControl] = 'question'>
-          <label for="floatingInput">คำถาม</label>
+          <input type="text" class="form-control" id="floatingInput" placeholder="คำถาม" (change)="Question_(q5.value)" #q5>
+          <label for="floatingInput">คำถาม {{question}}</label>
         </div>
   </div>
   <div class="container" >

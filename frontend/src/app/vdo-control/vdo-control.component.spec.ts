@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { UploadListComponent } from './upload-list.component';
+import { VdoControlComponent } from './vdo-control.component';
 
-describe('UploadListComponent', () => {
-  let component: UploadListComponent;
-  let fixture: ComponentFixture<UploadListComponent>;
+describe('VdoControlComponent', () => {
+  let component: VdoControlComponent;
+  let fixture: ComponentFixture<VdoControlComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ UploadListComponent ]
+      declarations: [ VdoControlComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(UploadListComponent);
+    fixture = TestBed.createComponent(VdoControlComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

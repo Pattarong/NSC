@@ -85,9 +85,23 @@ export class UserService {
   async edit_question(lid : string,qid : string,data : any){
     this.db.patch(this.Api+"/question_classroom/edit/teacher/"+lid+"/"+qid,data)
   }
-  // Test
-  async random(){
-     this.res =  await this.db.get(this.Api+"/random_arr/")
-     return this.res.data
+  async data_question(uid : string,lid : string,qid : string){
+    this.res = await this.db.get(this.Api+"/home/users/classroom/lesson/"+uid+"/"+lid+"/"+qid)
+    return this.res.data
+  }
+  async Add_Classroom_New(uid : string,clid : string){
+    this.res = await this.db.post(this.Api+"/home/users/classroom/allclassroom/add_classroom/"+uid,{"id_classroom" : clid})
+    this.res.data
+  }
+  async Table(uid : string){
+    this.res = await this.db.get(this.Api+"/home/users/classroom/priority/"+uid)
+    return await this.res.data
+  }
+  async Edit_Filelesson(lid : string,data : any){
+    this.res = await this.db.patch(this.Api+"/edit/filelesson/"+lid,data)
+  }
+  async Send_Answer (lid : string,uid : string,qid : string,data : any){
+    this.res = await this.db.post(this.Api+"/question_classroom/add_answer/student/"+uid+"/"+lid+"/"+qid,data)
+    return this.res.data
   }
 }

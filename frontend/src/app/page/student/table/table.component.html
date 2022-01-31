@@ -1,1 +1,34 @@
-<p>table works!</p>
+
+<main class="col-md-9  col-lg-20 px-md-4 py-4 " style="width: auto;">
+  <div class="container ">
+      <h1 class="h1" style="font-size: 300%; font-style: Promt;">เวลาเรียน</h1>
+  </div>
+  <div class="container">
+      <div class="table-responsive-sm">
+    <table class="table" style="margin-top: 1cm;" *ngFor="let list_lesson of data_table.dataclassroom">
+              <caption></caption>
+      <thead>
+        <tr>
+          <th scope="col" style="font-size:170%;font-family:Promt">ชื่อบทเรียน</th>
+          <th scope="col" style="font-size:170%;font-family:Promt">ชื่อห้องเรียน</th>
+          <th scope="col" style="font-size:170%;font-family:Promt">เวลาที่ใช้ดูวิดิโอ</th>
+          <th scope="col" style="font-size:170%;font-family:Promt">เวลาที่เหลือ</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr  *ngFor="let lesson of list_lesson.id_lesson">
+
+            <th scope="row">{{lesson.name}}</th>
+            <td>{{list_lesson.name_classroom}}</td>
+            <td><app-data-time [type]="1" [data]="lesson.time"></app-data-time></td>
+            <td><app-data-time [type]="2" [data]="lesson.deadline"></app-data-time></td>
+
+
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</main>
+
+

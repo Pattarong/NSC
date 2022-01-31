@@ -97,8 +97,8 @@
         <div class="container-fluid;width:100%;">
           <div class = "row" >
             <div class="form-floating mb-3">
-              <label style="padding-bottom: 10px;width: 60%;">Name Lesson : {{name}}</label>
-              <input type="email" class="form-control" placeholder="Name Lesson" style="width: 60%;">
+              <label style="padding-bottom: 10px;width: 60%;">Name Lesson : {{name_lesson}}</label>
+              <input type="email" class="form-control"  [formControl] = 'name_lesson' placeholder="Name Lesson" style="width: 60%;" >
 
             </div>
           </div>
@@ -108,7 +108,7 @@
                 <mat-label>Deadline</mat-label>
                 <mat-select [(value)]="select_deadline">
                   <mat-option value="None" >None</mat-option>
-                  <mat-option value=""> {{datetime_ | date:'medium'}}</mat-option>
+                  <mat-option value="Done"> {{datetime_ | date:'medium'}}</mat-option>
                 </mat-select>
               </mat-form-field>
 
@@ -129,20 +129,16 @@
               File Docment
             </div>
           </div>
+          <div class="row">
+              <button>Click</button>
+          </div>
             <div class = "row" >
               <div style="height: auto;text-align: center;">
                 <youtube-player
                   videoId="wqhdi6ZgzEg"
-                  suggestedQuality="highres"
-
-                  [startSeconds]="4"
-                  [endSeconds]="8">
+                  suggestedQuality="highres">
                 </youtube-player>
-
               </div>
-
-
-
             </div>
             <div class = "row" >
               <div *ngFor="let data of res_dataquestion">

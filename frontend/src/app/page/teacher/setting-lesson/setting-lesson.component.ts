@@ -1,8 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute,Router } from '@angular/router';
 import { UserService } from 'src/app/services/api/user.service';
-import { Router } from '@angular/router';
 @Component({
   selector: 'app-setting-lesson',
   templateUrl: './setting-lesson.component.html',
@@ -14,13 +13,14 @@ export class SettingLessonComponent implements OnInit {
   uid = ""
   res_data = []
   name : any = ""
-  select_deadline = 'None'
+  select_deadline : any = 'None'
   select_mindmap = 'None'
   status_deadline = false
   datetime_ : any= "None"
   res_lesson : any = {}
   type_question : number = 1
   res_dataquestion : any
+  name_lesson = new FormControl('')
   constructor(private a_router : ActivatedRoute,
               private service  : UserService,
               private router   : Router) { }
@@ -29,11 +29,14 @@ export class SettingLessonComponent implements OnInit {
     this.lid = this.a_router.snapshot.params["lid"]
     this.clid = this.a_router.snapshot.params["clid"]
     this.uid = this.a_router.snapshot.params["uid"]
+    this.res_dataquestion = await this.service.find_question(this.lid)
     this.name = await this.service.name_lesson(this.lid)
+    this.name_lesson = this.name
     this.res_lesson = await this.service.data_lesson(this.lid)
     this.select_deadline = await this.res_lesson.deadline
     this.datetime_ = new Date(await this.res_lesson.deadline)
-    this.res_dataquestion = await this.service.find_question(this.lid)
+
+
   }
   Check(){
     this.status_deadline = !this.status_deadline

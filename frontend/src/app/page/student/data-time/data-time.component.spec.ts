@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { UploadFormComponent } from './upload-form.component';
+import { DataTimeComponent } from './data-time.component';
 
-describe('UploadFormComponent', () => {
-  let component: UploadFormComponent;
-  let fixture: ComponentFixture<UploadFormComponent>;
+describe('DataTimeComponent', () => {
+  let component: DataTimeComponent;
+  let fixture: ComponentFixture<DataTimeComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ UploadFormComponent ]
+      declarations: [ DataTimeComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(UploadFormComponent);
+    fixture = TestBed.createComponent(DataTimeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

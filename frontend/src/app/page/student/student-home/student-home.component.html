@@ -95,7 +95,11 @@
     <mat-icon>table</mat-icon>
     <span>Table</span>
   </button>
-
+  <div>
+    <h4>Add Clasroom +</h4>
+    <input type="text" [formControl] = "search_classroom" style="margin: 10px;" placeholder="id classroom"><br>
+    <button type="button" class="btn btn-light" (click)="Add_Classroom_Home()">Add+</button>
+  </div>
   <mat-divider></mat-divider>
 
 
@@ -107,7 +111,7 @@
 <mat-sidenav-content >
     <div class="content mat-elevation-z8">
       <app-list-student [data_classroom]="res_data.dataclassroom" *ngIf="PageLayout[0]" [uid] = "uid"></app-list-student>
-      <app-table *ngIf="PageLayout[1]"></app-table>
+      <app-table *ngIf="PageLayout[1]" [uid]="uid"></app-table>
     </div>
 
 </mat-sidenav-content>

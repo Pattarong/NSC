@@ -27,4 +27,5 @@ export class LearnLessonComponent implements OnInit {
   goToLesson(){
     this.router.navigate(["lesson/stu/"+this.uid+"/"+this.clid])
   }
+
 }
