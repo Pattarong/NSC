@@ -11,9 +11,23 @@
   </mat-form-field>
   <input type="number" placeholder="hour" [formControl] = "hour">
   <input type="number" placeholder="minute" [formControl] = "minute">
+    <div style="align-items: center;text-align: center;" *ngIf="sure_file == 'mp4'">
+      <video width="50%" height="30%" controls >
+        <source src={{path_file}} type="video/mp4">
+      </video>
+    </div>
+    <div style="align-items: center;text-align: center;width: auto;height: auto;" >
+      <img src={{path_file}} *ngIf="sure_file == 'jpg' || sure_file == 'png'">
+    </div>
+    <div style="align-items: center;text-align: center;width: auto;height: auto;" *ngIf="sure_file == 'mp4' || sure_file == 'png' || sure_file == 'jpg'">
+      <button (click)="Delete_file(data_qid.id_question)" >Delete</button>
+    </div>
+
+
+  <app-uploadfile (keyfile)="Add_File($event)"></app-uploadfile>
   <div *ngIf="data_qid.pattern.type == 1">
     <main >
-      <div class="container ">
+        <div class="container ">
           <h1 class="h2" style="font-size: 200%; ">รูปแบบที่ 1 เลือกคำตอบที่ถูกได้เพียง 1 คำตอบ</h1>
         </div>
       <div>
@@ -29,11 +43,7 @@
   </div>
   <div class="container" >
       <div class="form-floating mb-3">
-      <form action="/action_page.php">
-          <h1 style="font-size: 150%;">อัพโหลดไฟล์รูปภาพหรือวิดิโอ</h1>
-          <input type="file" id="myFile" name="filename">
-          <input type="submit">
-        </form>
+          #
       </div>
   </div>
   <div class="container" >
@@ -86,11 +96,7 @@
   </div>
   <div class="container" >
       <div class="form-floating mb-3">
-      <form action="/action_page.php">
-          <h1 style="font-size: 150%;">อัพโหลดไฟล์รูปภาพหรือวิดิโอ</h1>
-          <input type="file" id="myFile" name="filename">
-          <input type="submit">
-        </form>
+      #
       </div>
   </div>
   <div class="container" >
@@ -144,11 +150,7 @@
 </div>
 <div class="container" >
     <div class="form-floating mb-3">
-    <form action="/action_page.php">
-        <h1 style="font-size: 150%;">อัพโหลดไฟล์รูปภาพหรือวิดิโอ</h1>
-        <input type="file" id="myFile" name="filename">
-        <input type="submit">
-      </form>
+      #
     </div>
 </div>
 <div class="container" >
@@ -242,11 +244,7 @@
   </div>
   <div class="container" >
       <div class="form-floating mb-3">
-      <form action="/action_page.php">
-          <h1 style="font-size: 150%;">อัพโหลดไฟล์รูปภาพหรือวิดิโอ</h1>
-          <input type="file" id="myFile" name="filename">
-          <input type="submit">
-        </form>
+          #
       </div>
   </div>
 
@@ -270,11 +268,7 @@
   </div>
   <div class="container" >
       <div class="form-floating mb-3">
-      <form action="/action_page.php">
-          <h1 style="font-size: 150%;">อัพโหลดไฟล์รูปภาพหรือวิดิโอ</h1>
-          <input type="file" id="myFile" name="filename">
-          <input type="submit">
-        </form>
+      #
       </div>
   </div>
   <div class="container ">

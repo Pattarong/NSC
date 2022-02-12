@@ -82,11 +82,11 @@
 
   <mat-divider></mat-divider>
 
-  <button mat-button class="menu-button" (click)="goTo_editclassroom()">
+  <button mat-button class="menu-button" (click)="goToeditclassroom()">
       <mat-icon>keyboard_return</mat-icon>
       <span>Return</span>
   </button>
-  <button mat-button class="menu-button" (click)="goTo_login()">
+  <button mat-button class="menu-button" (click)="goTologin()">
     <mat-icon>logout</mat-icon>
     <span>Logout</span>
 </button>
@@ -97,8 +97,8 @@
         <div class="container-fluid;width:100%;">
           <div class = "row" >
             <div class="form-floating mb-3">
-              <label style="padding-bottom: 10px;width: 60%;">Name Lesson : {{name_lesson}}</label>
-              <input type="email" class="form-control"  [formControl] = 'name_lesson' placeholder="Name Lesson" style="width: 60%;" >
+              <label style="padding-bottom: 10px;width: 60%;" id = "name_lesson" name = "name">Name Lesson : {{name_lesson}}</label>
+              <input type="email" class="form-control"  [formControl] = 'name_lesson' placeholder="Name Lesson" style="width: 60%;" id = "name_lesson" name = "name">
 
             </div>
           </div>
@@ -134,10 +134,8 @@
           </div>
             <div class = "row" >
               <div style="height: auto;text-align: center;">
-                <youtube-player
-                  videoId="wqhdi6ZgzEg"
-                  suggestedQuality="highres">
-                </youtube-player>
+
+                  <app-uploadfile (keyfile)="Save_File($event)"></app-uploadfile>
               </div>
             </div>
             <div class = "row" >

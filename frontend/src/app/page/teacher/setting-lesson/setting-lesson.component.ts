@@ -21,6 +21,7 @@ export class SettingLessonComponent implements OnInit {
   type_question : number = 1
   res_dataquestion : any
   name_lesson = new FormControl('')
+  path_file = ''
   constructor(private a_router : ActivatedRoute,
               private service  : UserService,
               private router   : Router) { }
@@ -31,7 +32,7 @@ export class SettingLessonComponent implements OnInit {
     this.uid = this.a_router.snapshot.params["uid"]
     this.res_dataquestion = await this.service.find_question(this.lid)
     this.name = await this.service.name_lesson(this.lid)
-    this.name_lesson = this.name
+    this.name_lesson.setValue(this.name)
     this.res_lesson = await this.service.data_lesson(this.lid)
     this.select_deadline = await this.res_lesson.deadline
     this.datetime_ = new Date(await this.res_lesson.deadline)
@@ -62,10 +63,13 @@ export class SettingLessonComponent implements OnInit {
     this.res_dataquestion = await this.service.find_question(this.lid)
     console.log("Status > "+res )
   }
-  goTo_editclassroom(){
+  goToeditclassroom(){
     this.router.navigate(["edit/lesson/"+this.clid+"/"+this.uid])
   }
-  goTo_login(){
+  goTologin(){
     this.router.navigate(["login"])
+  }
+  Save_File(path : string){
+    this.path_file = path
   }
 }

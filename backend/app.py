@@ -1,14 +1,19 @@
 
-
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, send_from_directory
 from bson import objectid
 import hashlib
-from jinja2.environment import create_cache
+
 import random
 from pymongo import results
 import jwt
+import os
+from datetime import datetime
 from flask_cors import CORS
+
+UPLOAD_FOLDER = 'uploads'
+
 app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 CORS(app)
 if __name__ == "__main__" :
     app.run(host="0.0.0.0")
@@ -481,3 +486,35 @@ def get_home_user_class_priority (uid) :
 def Edit_lesson(lid) :
     data_json = request.get_json()
     get_database("file_lesson").update_one({"id_lesson" : lid},{"$set" : data_json})
+
+@app.route("/upload/<file_name>")
+def read_file(file_name):
+    if file_name == "":
+        return {"success":False}
+    return send_from_directory(app.config['UPLOAD_FOLDER'], file_name)
+
+@app.route("/upload/<file_name>", methods = ['DELETE'])
+def delete_file(file_name):
+    if file_name == "":
+        return {"success":False}
+    os.remove(os.path.join(app.config['UPLOAD_FOLDER'], file_name))
+    return {"success":True}
+
+@app.route("/upload", methods=['POST'])
+def upload_file():
+    if 'file' not in request.files:
+        return {"success":False}
+    file = request.files['file']
+    if file.filename == '':
+        return {"success":False}
+    range_len = len(file.filename.split('.'))
+    file_type = file.filename.split('.')[range_len-1]
+    current_time = datetime.now().timestamp()
+    new_file_name = str(file.filename)+str(current_time)
+    new_file_hash = hashlib.md5(new_file_name.encode()).hexdigest()
+    file.save(os.path.join(app.config['UPLOAD_FOLDER'], new_file_hash+'.'+file_type))
+    return {"success" : new_file_hash+'.'+file_type}
+@app.route("/savefile/<lid>/<path>",methods=['POST'])
+def save_file(lid,path):
+     get_database('file_lesson').updateone({"id_lesson" : lid},{})
+     return {}

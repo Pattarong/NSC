@@ -26,6 +26,8 @@ export class QuizComponent implements OnInit {
   pick_surefile = ""
   add_point = "None"
   point = new FormControl('0')
+  path_file : any = ''
+  sure_file = ''
   constructor(private service : UserService) { }
   pattern = [
     {},
@@ -67,6 +69,16 @@ export class QuizComponent implements OnInit {
     console.log(this.data_qid)
     this.type = this.data_qid.pattern.type
     this.question = this.data_qid.pattern.question
+    let namefile = this.data_qid.pattern.path_question
+    if (namefile !== undefined && namefile !== ''){
+      this.sure_file = this.data_qid.pattern.path_question.split(".")[1]
+      this.path_file = "http://127.0.0.1:5000/upload/"+namefile
+    }
+    else {
+      this.path_file = ""
+    }
+
+    console.log(this.path_file)
     if(this.pattern[5]["list_type_file"] == undefined){
       this.pattern[5]["list_type_file"] = []
     }
@@ -96,7 +108,6 @@ export class QuizComponent implements OnInit {
   }
   Edit_Quiz(qid : string){
     this.pattern[this.type]["question"] = this.question
-    console.log(this.point.value)
     this.data = {
       "pattern" : this.pattern[this.type],
       "time" : {
@@ -157,9 +168,7 @@ export class QuizComponent implements OnInit {
     }
     return arr_ps
   }
-  Add_Question(type : number , key : string,data : any){
 
-  }
   Add_Variable(){
     if (this.max.value > this.min.value  && this.variable.value != ''){
       this.pattern[3]["variable"] = {
@@ -182,5 +191,22 @@ export class QuizComponent implements OnInit {
   }
   Equation_Change(d : string){
     this.pattern[3]["equation"] = d
+  }
+  Add_File(path : string){
+    this.pattern[this.type]["path_question"] = path
+  }
+  Delete_file(qid : string){
+    this.service.DeleteFile(this.pattern[this.type]["path_question"])
+    this.pattern[this.type]["question"] = this.question
+    this.pattern[this.type]["path_question"] = ''
+    this.data = {
+      "pattern" : this.pattern[this.type],
+      "time" : {
+        "hour" : parseInt(this.hour.value),
+        "minute" : parseInt(this.minute.value)
+      },
+      "point" : parseInt(this.point.value)
+    };
+    this.service.edit_question(this.lid,qid,this.data)
   }
 }

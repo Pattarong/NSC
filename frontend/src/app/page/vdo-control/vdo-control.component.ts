@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-vdo-control',
@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./vdo-control.component.scss']
 })
 export class VdoControlComponent implements OnInit {
-
+  @Input() path_file = ''
   constructor() { }
 
   ngOnInit(): void {

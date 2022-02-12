@@ -42,6 +42,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { UploadfileComponent } from './uploadfile/uploadfile.component';
 import { DataTimeComponent } from './page/student/data-time/data-time.component';
 import { ProfileUserComponent } from './profile-user/profile-user.component';
+import { VdoControlComponent } from './page/vdo-control/vdo-control.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -66,7 +67,8 @@ import { ProfileUserComponent } from './profile-user/profile-user.component';
     QuizDisplayComponent,
     UploadfileComponent,
     DataTimeComponent,
-    ProfileUserComponent
+    ProfileUserComponent,
+    VdoControlComponent
   ],
   imports: [
     BrowserModule,

@@ -1,1 +1,11 @@
-1
+<form  [formGroup]="uploadform" style="margin: 15px;height: 30%;" (ngSubmit)="onUpload()" >
+  <div class="row" style="align-items: center;justify-content: center;display: flex;">
+    <input (change)="onFileChange($event)" formControlName="file" type="file" class="form-control" id="name" name="name" style="width: 60%;" />
+    <input type="submit" value="Upload" style="width: 10%;">
+    <mat-card style="width: 10%;" >
+        success
+        <mat-icon class="mat-icon green" style="margin-left: 15px;">done</mat-icon>
+    </mat-card>
+
+  </div>
+</form>

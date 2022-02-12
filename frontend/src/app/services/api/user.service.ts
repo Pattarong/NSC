@@ -8,7 +8,8 @@ Router
 })
 export class UserService {
   db = axiosClient
-  Api = "https://great-teacher-online.herokuapp.com"
+  Api = "http://127.0.0.1:5000"
+  // Api = "https://great-teacher-online.herokuapp.com"
   res : any;
   constructor() { }
   async login_user(data : LoginUser){
@@ -103,5 +104,17 @@ export class UserService {
   async Send_Answer (lid : string,uid : string,qid : string,data : any){
     this.res = await this.db.post(this.Api+"/question_classroom/add_answer/student/"+uid+"/"+lid+"/"+qid,data)
     return this.res.data
+  }
+  async UploadFile(form_data:FormData){
+    let res = await this.db.post(this.Api+"/upload",form_data);
+    if(res.status == 200){
+      const results:[] = res.data
+      console.log(results)
+      return results
+    }
+    return []
+  }
+  async DeleteFile(path:string){
+    this.db.delete(this.Api+"/upload/"+path);
   }
 }

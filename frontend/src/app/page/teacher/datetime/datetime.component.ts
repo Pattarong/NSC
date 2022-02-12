@@ -11,8 +11,6 @@ export class DatetimeComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    this.Date = new Date("25/01/2022");
-    console.log(this.Date)
   }
   OnChange(dateTime : any){
       console.log(dateTime)
